@@ -1,6 +1,10 @@
 
 # Creating a Rest API with JWT authentication and role based authorization using TypeScript…
 
+- Usar NVM para seleccionar versión de node `nvm use` según configuración `.nvmrc`
+- Poner claves de DB en `ormconfig.json`
+- Ejecutar aplicación para crear tablas `npm run start`
+- Ejecutar migración para actualizar tablas y cargar datos `migration:run`  
 
 
 Today, we are going to use TypeScript Express.js and TypeORM to create an enterprise level Rest API with JWT authentication and role based authorization. The objective is to create a repository that you can use as bases for your real life projects.
