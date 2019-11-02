@@ -2,23 +2,24 @@ import {Request, Response} from 'express';
 import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
-import {Usuario} from '../entity/Usuario';
+import {Usuario} from '../../entity/Usuario';
 
-class UserController {
+class UsuarioController {
   static listAll = async (req: Request, res: Response) => {
     //Get users from database
     const userRepository = getRepository(Usuario);
-    const users = await userRepository.find({
+    const usuarios = await userRepository.find({
       select: ['id', 'username', 'role'], //We dont want to send the passwords on response
     });
+    console.log('>>> listAll: ', usuarios);
 
     //Send the users object
-    res.send(users);
+    res.send(usuarios);
   };
 
   static getOneById = async (req: Request, res: Response) => {
     //Get the ID from the url
-    const id: number = Number(req.params.id);
+    const id: string = req.params.id;
 
     //Get the user from database
     const userRepository = getRepository(Usuario);
@@ -26,9 +27,11 @@ class UserController {
       const usuarios = await userRepository.findOneOrFail(id, {
         select: ['id', 'username', 'role'], //We dont want to send the password on response
       });
+      console.log('>>> getOneById: ', usuarios);
+
       res.send(usuarios);
     } catch (error) {
-      res.status(404).send('User not found');
+      res.status(404).send('Usuario no encontrado');
     }
   };
 
@@ -65,7 +68,7 @@ class UserController {
 
   static editUser = async (req: Request, res: Response) => {
     //Get the ID from the url
-    const id = req.params.id;
+    const id: string = req.params.id;
 
     //Get values from the body
     const {username, role} = req.body;
@@ -103,21 +106,20 @@ class UserController {
 
   static deleteUser = async (req: Request, res: Response) => {
     //Get the ID from the url
-    const id = req.params.id;
+    const id: string = req.params.id;
 
     const userRepository = getRepository(Usuario);
-    let user: Usuario;
     try {
-      user = await userRepository.findOneOrFail(id);
+      await userRepository.findOneOrFail(id);
     } catch (error) {
       res.status(404).send('User not found');
       return;
     }
-    userRepository.delete(id);
+    await userRepository.delete(id);
 
     //After all send a 204 (no content, but accepted) response
     res.status(204).send();
   };
 }
 
-export default UserController;
+export default UsuarioController;
