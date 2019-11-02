@@ -1,0 +1,18 @@
+{
+	"basePath": "/",
+	"consumes": [
+		"application/json"
+	],
+	"definitions": {},
+	"info": {
+		"title": "jwt-express-typeorm",
+		"version": "0.0.1",
+		"description": "Awesome project developed with TypeORM."
+	},
+	"paths": {},
+	"produces": [
+		"application/json"
+	],
+	"swagger": "2.0",
+	"securityDefinitions": {}
+}

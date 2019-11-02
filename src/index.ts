@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import * as helmet from 'helmet';
 import * as cors from 'cors';
 import routes from './routes';
+const port = process.env.PORT || 3000;
 
 //Connects to the Database -> then starts the express
 createConnection()
@@ -20,8 +21,8 @@ createConnection()
     //Set all routes from routes folder
     app.use('/', routes);
 
-    app.listen(3000, () => {
-      console.log('🚀 Server started: http://localhost:3000');
+    app.listen(port, () => {
+      console.log(`🚀 Server started: http://localhost:${port}/doc`);
     });
   })
   .catch(error => console.log(error));
