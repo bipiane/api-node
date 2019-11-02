@@ -2,12 +2,12 @@ import {Request, Response} from 'express';
 import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
-import {User} from '../entity/User';
+import {Usuario} from '../entity/Usuario';
 
 class UserController {
   static listAll = async (req: Request, res: Response) => {
     //Get users from database
-    const userRepository = getRepository(User);
+    const userRepository = getRepository(Usuario);
     const users = await userRepository.find({
       select: ['id', 'username', 'role'], //We dont want to send the passwords on response
     });
@@ -21,7 +21,7 @@ class UserController {
     const id: number = Number(req.params.id);
 
     //Get the user from database
-    const userRepository = getRepository(User);
+    const userRepository = getRepository(Usuario);
     try {
       const usuarios = await userRepository.findOneOrFail(id, {
         select: ['id', 'username', 'role'], //We dont want to send the password on response
@@ -35,7 +35,7 @@ class UserController {
   static newUser = async (req: Request, res: Response) => {
     //Get parameters from the body
     let {username, password, role} = req.body;
-    let user = new User();
+    let user = new Usuario();
     user.username = username;
     user.password = password;
     user.role = role;
@@ -51,7 +51,7 @@ class UserController {
     user.hashPassword();
 
     //Try to save. If fails, the username is already in use
-    const userRepository = getRepository(User);
+    const userRepository = getRepository(Usuario);
     try {
       await userRepository.save(user);
     } catch (e) {
@@ -71,7 +71,7 @@ class UserController {
     const {username, role} = req.body;
 
     //Try to find user on database
-    const userRepository = getRepository(User);
+    const userRepository = getRepository(Usuario);
     let user;
     try {
       user = await userRepository.findOneOrFail(id);
@@ -105,8 +105,8 @@ class UserController {
     //Get the ID from the url
     const id = req.params.id;
 
-    const userRepository = getRepository(User);
-    let user: User;
+    const userRepository = getRepository(Usuario);
+    let user: Usuario;
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
