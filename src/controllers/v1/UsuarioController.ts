@@ -1,20 +1,19 @@
-import {Get, Post, Route, SuccessResponse, Tags} from 'tsoa';
-import {Request, Response} from 'express';
+import {Body, Delete, Get, OperationId, Post, Put, Route, SuccessResponse, Tags} from 'tsoa';
 import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
 import {Usuario} from '../../entity/Usuario';
-import {DataResponse} from './utilidades/DataResponse';
-import {UsuarioAPI} from './utilidades/UsuarioAPI';
+import {UsuarioCreationRequest, UsuarioUpdateRequest, UsuarioAPI} from './utilidades/UsuarioAPI';
 
 /**
- * @TODO Implementar midleware: [checkJwt, checkRole(['ADMIN'])]
+ * @TODO Implementar midleware de seguridad: [checkJwt, checkRole(['ADMIN'])]
  */
+@Tags('Usuario')
 @Route('api/v1/usuarios')
 export class UsuarioController {
   @Get()
-  @Tags('ListaUsuarios')
-  async listAll(): Promise<UsuarioAPI[]> {
+  @OperationId('findAllUsuarios')
+  async index(): Promise<UsuarioAPI[]> {
     const userRepository = getRepository(Usuario);
     const lista = await userRepository.find();
 
@@ -24,8 +23,8 @@ export class UsuarioController {
   }
 
   @Get('{id}')
-  @Tags('FindUsuario')
-  async getOneById(id: string): Promise<UsuarioAPI> {
+  @OperationId('findUsuario')
+  async show(id: string): Promise<UsuarioAPI> {
     const userRepository = getRepository(Usuario);
     const usuario = await userRepository.findOne(id);
 
@@ -36,9 +35,11 @@ export class UsuarioController {
     return new UsuarioAPI(usuario);
   }
 
-  static newUser = async (req: Request, res: Response) => {
-    //Get parameters from the body
-    let {username, password, role} = req.body;
+  @Post()
+  @OperationId('saveUsuario')
+  @SuccessResponse('201', 'Usuario creado correctamente')
+  async save(@Body() requestBody: UsuarioCreationRequest): Promise<UsuarioAPI> {
+    let {username, password, role} = requestBody;
     let user = new Usuario();
     user.username = username;
     user.password = password;
@@ -47,7 +48,7 @@ export class UsuarioController {
     //Validade if the parameters are ok
     const errors = await validate(user);
     if (errors.length > 0) {
-      res.status(400).send(errors);
+      // res.status(400).send(errors);
       return;
     }
 
@@ -59,66 +60,67 @@ export class UsuarioController {
     try {
       await userRepository.save(user);
     } catch (e) {
-      res.status(409).send('username already in use');
+      // res.status(409).send('username already in use');
       return;
     }
 
-    //If all ok, send 201 response
-    res.status(201).send('User created');
-  };
+    return user;
+  }
 
-  static editUser = async (req: Request, res: Response) => {
-    //Get the ID from the url
-    const id: string = req.params.id;
-
-    //Get values from the body
-    const {username, role} = req.body;
+  @Put('{id}')
+  @OperationId('updateUsuario')
+  async update(id: string, @Body() requestBody: UsuarioUpdateRequest): Promise<UsuarioAPI> {
+    const {username, role} = requestBody;
 
     //Try to find user on database
     const userRepository = getRepository(Usuario);
-    let user;
+    let user: Usuario;
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
+      console.log('Usuario no encontrado: ', error);
       //If not found, send a 404 response
-      res.status(404).send('User not found');
+      // res.status(404).send('User not found');
       return;
     }
 
     //Validate the new values on model
-    user.username = username;
-    user.role = role;
+    user.username = username ? username : user.username;
+    user.role = role ? role : user.role;
     const errors = await validate(user);
     if (errors.length > 0) {
-      res.status(400).send(errors);
+      console.log('Error validación: ', errors);
+      // res.status(400).send(errors);
       return;
     }
 
     //Try to safe, if fails, that means username already in use
     try {
-      await userRepository.save(user);
+      user = await userRepository.save(user);
     } catch (e) {
-      res.status(409).send('username already in use');
+      console.log('Excepción al guardar: ', e);
+      // res.status(409).send('username already in use');
       return;
     }
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
-  };
+    // res.status(204).send();
+    return new UsuarioAPI(user);
+  }
 
-  static deleteUser = async (req: Request, res: Response) => {
-    //Get the ID from the url
-    const id: string = req.params.id;
-
+  @Delete('{id}')
+  @OperationId('deleteUsuario')
+  async delete(id: string): Promise<true> {
     const userRepository = getRepository(Usuario);
     try {
       await userRepository.findOneOrFail(id);
     } catch (error) {
-      res.status(404).send('User not found');
+      // res.status(404).send('User not found');
       return;
     }
     await userRepository.delete(id);
 
     //After all send a 204 (no content, but accepted) response
-    res.status(204).send();
-  };
+    // res.status(204).send();
+    return true;
+  }
 }

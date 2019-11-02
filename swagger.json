@@ -5,8 +5,7 @@
     "UsuarioAPI": {
       "properties": {
         "id": {
-          "type": "number",
-          "format": "double"
+          "type": "string"
         },
         "username": {
           "type": "string"
@@ -16,6 +15,36 @@
         }
       },
       "required": ["id", "username", "role"],
+      "type": "object",
+      "additionalProperties": true
+    },
+    "UsuarioCreationRequest": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "required": ["username", "password", "role"],
+      "type": "object",
+      "additionalProperties": true
+    },
+    "UsuarioUpdateRequest": {
+      "properties": {
+        "username": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "role": {
+          "type": "string",
+          "x-nullable": true
+        }
+      },
       "type": "object",
       "additionalProperties": true
     }
@@ -28,7 +57,7 @@
   "paths": {
     "/api/v1/usuarios": {
       "get": {
-        "operationId": "ListAll",
+        "operationId": "findAllUsuarios",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -41,14 +70,38 @@
             }
           }
         },
-        "tags": ["ListaUsuarios"],
+        "tags": ["Usuario"],
         "security": [],
         "parameters": []
+      },
+      "post": {
+        "operationId": "saveUsuario",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Usuario creado correctamente",
+            "schema": {
+              "$ref": "#/definitions/UsuarioAPI"
+            }
+          }
+        },
+        "tags": ["Usuario"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "requestBody",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UsuarioCreationRequest"
+            }
+          }
+        ]
       }
     },
     "/api/v1/usuarios/{id}": {
       "get": {
-        "operationId": "GetOneById",
+        "operationId": "findUsuario",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -58,7 +111,60 @@
             }
           }
         },
-        "tags": ["FindUsuario"],
+        "tags": ["Usuario"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      },
+      "put": {
+        "operationId": "updateUsuario",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/UsuarioAPI"
+            }
+          }
+        },
+        "tags": ["Usuario"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "requestBody",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UsuarioUpdateRequest"
+            }
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "deleteUsuario",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "string",
+              "enum": ["true"]
+            }
+          }
+        },
+        "tags": ["Usuario"],
         "security": [],
         "parameters": [
           {

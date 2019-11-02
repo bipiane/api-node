@@ -6,7 +6,7 @@ import * as bcrypt from 'bcryptjs';
 @Unique(['username'])
 export class Usuario {
   @ObjectIdColumn()
-  id: number;
+  id: string;
 
   @Column()
   @Length(4, 20)

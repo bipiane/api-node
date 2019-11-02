@@ -5,7 +5,7 @@
   "scripts": {
     "tsc": "tsc",
     "start": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts",
-    "tsoa:gen": "tsoa routes && tsoa swagger",
+    "tsoa:gen": "tsoa routes && tsoa swagger && npm run prettier",
     "prod": "tsc && node ./build/index.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "prettier": "prettier --config ./.prettierrc --write \"src/**/*{.ts,.js,.json,.css,.scss,.html}\" \"*.json\" "
