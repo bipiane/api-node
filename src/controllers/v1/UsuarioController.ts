@@ -1,3 +1,4 @@
+import {Get, Post, Route, SuccessResponse, Tags} from 'tsoa';
 import {Request, Response} from 'express';
 import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
@@ -6,28 +7,33 @@ import {Usuario} from '../../entity/Usuario';
 import {DataResponse} from './utilidades/DataResponse';
 import {UsuarioAPI} from './utilidades/UsuarioAPI';
 
-class UsuarioController {
-  async listAll(req: Request, res: Response) {
+/**
+ * @TODO Implementar midleware: [checkJwt, checkRole(['ADMIN'])]
+ */
+@Route('api/v1/usuarios')
+export class UsuarioController {
+  @Get()
+  @Tags('ListaUsuarios')
+  async listAll(): Promise<UsuarioAPI[]> {
     const userRepository = getRepository(Usuario);
     const lista = await userRepository.find();
 
-    const usuarios = lista.map(u => {
+    return lista.map(u => {
       return new UsuarioAPI(u);
     });
-
-    DataResponse.dataOK(res, usuarios);
   }
 
-  async getOneById(req: Request, res: Response) {
-    const id: string = req.params.id;
-
+  @Get('{id}')
+  @Tags('FindUsuario')
+  async getOneById(id: string): Promise<UsuarioAPI> {
     const userRepository = getRepository(Usuario);
-    try {
-      const usuario = await userRepository.findOneOrFail(id);
-      DataResponse.dataOK(res, new UsuarioAPI(usuario));
-    } catch (error) {
-      DataResponse.dataError(res, 'Usuario no encontrado', 404);
-    }
+    const usuario = await userRepository.findOne(id);
+
+    // if (!usuario) {
+    //   return DataResponse.dataError('Usuario no encontrado', 404);
+    // }
+
+    return new UsuarioAPI(usuario);
   }
 
   static newUser = async (req: Request, res: Response) => {
@@ -116,5 +122,3 @@ class UsuarioController {
     res.status(204).send();
   };
 }
-
-export default UsuarioController;

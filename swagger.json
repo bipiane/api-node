@@ -1,18 +1,77 @@
 {
-	"basePath": "/",
-	"consumes": [
-		"application/json"
-	],
-	"definitions": {},
-	"info": {
-		"title": "jwt-express-typeorm",
-		"version": "0.0.1",
-		"description": "Awesome project developed with TypeORM."
-	},
-	"paths": {},
-	"produces": [
-		"application/json"
-	],
-	"swagger": "2.0",
-	"securityDefinitions": {}
+  "basePath": "/",
+  "consumes": ["application/json"],
+  "definitions": {
+    "UsuarioAPI": {
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "double"
+        },
+        "username": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "username", "role"],
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "info": {
+    "title": "jwt-express-typeorm",
+    "version": "0.0.1",
+    "description": "Awesome project developed with TypeORM."
+  },
+  "paths": {
+    "/api/v1/usuarios": {
+      "get": {
+        "operationId": "ListAll",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/UsuarioAPI"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "tags": ["ListaUsuarios"],
+        "security": [],
+        "parameters": []
+      }
+    },
+    "/api/v1/usuarios/{id}": {
+      "get": {
+        "operationId": "GetOneById",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/UsuarioAPI"
+            }
+          }
+        },
+        "tags": ["FindUsuario"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ]
+      }
+    }
+  },
+  "produces": ["application/json"],
+  "swagger": "2.0",
+  "securityDefinitions": {}
 }

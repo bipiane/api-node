@@ -13,19 +13,17 @@ export class DataResponse {
   }
 
   static dataError(
-    res: Response,
     userMessage: string,
     status: number,
     developerMessage: string = null,
     validationErrors: string[] = [],
   ) {
-    const resp = {
+    return {
       result: 'error',
       status: status,
       userMessage: userMessage,
       developerMessage: developerMessage,
       validationErrors: validationErrors,
     };
-    res.status(status).send(resp);
   }
 }
