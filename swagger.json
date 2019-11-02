@@ -2,6 +2,29 @@
   "basePath": "/",
   "consumes": ["application/json"],
   "definitions": {
+    "TokenAPI": {
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": ["token"],
+      "type": "object",
+      "additionalProperties": true
+    },
+    "LoginRequest": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["username", "password"],
+      "type": "object",
+      "additionalProperties": true
+    },
     "UsuarioAPI": {
       "properties": {
         "id": {
@@ -55,6 +78,32 @@
     "description": "Awesome project developed with TypeORM."
   },
   "paths": {
+    "/login": {
+      "post": {
+        "operationId": "login",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/TokenAPI"
+            }
+          }
+        },
+        "tags": ["Auth"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "requestBody",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            }
+          }
+        ]
+      }
+    },
     "/api/v1/usuarios": {
       "get": {
         "operationId": "findAllUsuarios",

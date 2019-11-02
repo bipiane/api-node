@@ -5,6 +5,7 @@
   },
   "routes": {
     "basePath": "/",
+    "controllerPathGlobs": ["./src/controllers/**/*Controller.ts"],
     "entryFile": "./src/index.ts",
     "routesDir": "./src/router"
   }

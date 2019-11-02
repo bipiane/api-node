@@ -5,13 +5,30 @@ import {validate} from 'class-validator';
 
 import {Usuario} from '../entity/Usuario';
 import config from '../config/config';
+import {Body, OperationId, Post, Route, Tags} from 'tsoa';
 
-class AuthController {
-  static login = async (req: Request, res: Response) => {
-    //Check if username and password are set
-    let {username, password} = req.body;
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export class TokenAPI {
+  token: string;
+
+  constructor(token: string) {
+    this.token = token;
+  }
+}
+
+@Tags('Auth')
+@Route('/')
+export class AuthController {
+  @Post('login')
+  @OperationId('login')
+  async login(@Body() requestBody: LoginRequest): Promise<TokenAPI> {
+    let {username, password} = requestBody;
     if (!(username && password)) {
-      res.status(400).send();
+      // res.status(400).send();
     }
 
     //Get user from database
@@ -20,12 +37,12 @@ class AuthController {
     try {
       user = await userRepository.findOneOrFail({where: {username}});
     } catch (error) {
-      res.status(401).send();
+      // res.status(401).send();
     }
 
     //Check if encrypted password match
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      res.status(401).send();
+      // res.status(401).send();
       return;
     }
 
@@ -35,8 +52,9 @@ class AuthController {
     });
 
     //Send the jwt in the response
-    res.send(token);
-  };
+    // res.send(token);
+    return new TokenAPI(token);
+  }
 
   static changePassword = async (req: Request, res: Response) => {
     //Get ID from JWT
@@ -77,4 +95,3 @@ class AuthController {
     res.status(204).send();
   };
 }
-export default AuthController;
