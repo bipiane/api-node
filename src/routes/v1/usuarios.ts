@@ -5,11 +5,13 @@ import {checkRole} from '../../middlewares/checkRole';
 
 const router = Router();
 
+const ctrl = new UsuarioController();
+
 //Get all users
-router.get('/', /*[checkJwt, checkRole(["ADMIN"])],*/ UsuarioController.listAll);
+router.get('/', /*[checkJwt, checkRole(["ADMIN"])],*/ ctrl.listAll);
 
 // Get one user
-router.get('/:id', /*[checkJwt, checkRole(['ADMIN'])],*/ UsuarioController.getOneById);
+router.get('/:id', /*[checkJwt, checkRole(['ADMIN'])],*/ ctrl.getOneById);
 
 //Create a new user
 router.post('/', [checkJwt, checkRole(['ADMIN'])], UsuarioController.newUser);

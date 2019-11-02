@@ -10,7 +10,17 @@ export class CreateAdminUser1547919837483 implements MigrationInterface {
     user.role = 'ADMIN';
     const userRepository = getRepository(Usuario);
 
-    const exist = await userRepository.findOne({where: {username: user.username}});
+    let exist = await userRepository.findOne({where: {username: user.username}});
+    if (!exist) {
+      await userRepository.save(user);
+    }
+
+    user = new Usuario();
+    user.username = 'ipianetti';
+    user.password = '123';
+    user.hashPassword();
+    user.role = 'SUPER_ADMIN';
+    exist = await userRepository.findOne({where: {username: user.username}});
     if (!exist) {
       await userRepository.save(user);
     }

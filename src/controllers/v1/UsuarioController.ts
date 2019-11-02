@@ -3,37 +3,32 @@ import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
 import {Usuario} from '../../entity/Usuario';
+import {DataResponse} from './utilidades/DataResponse';
+import {UsuarioAPI} from './utilidades/UsuarioAPI';
 
 class UsuarioController {
-  static listAll = async (req: Request, res: Response) => {
-    //Get users from database
+  async listAll(req: Request, res: Response) {
     const userRepository = getRepository(Usuario);
-    const usuarios = await userRepository.find({
-      select: ['id', 'username', 'role'], //We dont want to send the passwords on response
+    const lista = await userRepository.find();
+
+    const usuarios = lista.map(u => {
+      return new UsuarioAPI(u);
     });
-    console.log('>>> listAll: ', usuarios);
 
-    //Send the users object
-    res.send(usuarios);
-  };
+    DataResponse.dataOK(res, usuarios);
+  }
 
-  static getOneById = async (req: Request, res: Response) => {
-    //Get the ID from the url
+  async getOneById(req: Request, res: Response) {
     const id: string = req.params.id;
 
-    //Get the user from database
     const userRepository = getRepository(Usuario);
     try {
-      const usuarios = await userRepository.findOneOrFail(id, {
-        select: ['id', 'username', 'role'], //We dont want to send the password on response
-      });
-      console.log('>>> getOneById: ', usuarios);
-
-      res.send(usuarios);
+      const usuario = await userRepository.findOneOrFail(id);
+      DataResponse.dataOK(res, new UsuarioAPI(usuario));
     } catch (error) {
-      res.status(404).send('Usuario no encontrado');
+      DataResponse.dataError(res, 'Usuario no encontrado', 404);
     }
-  };
+  }
 
   static newUser = async (req: Request, res: Response) => {
     //Get parameters from the body
