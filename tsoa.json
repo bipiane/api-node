@@ -1,7 +1,8 @@
 {
   "swagger": {
     "outputDirectory": ".",
-    "entryFile": "./src/index.ts"
+    "entryFile": "./src/index.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras"
   },
   "routes": {
     "basePath": "/",

@@ -10,7 +10,7 @@
       },
       "required": ["token"],
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "LoginRequest": {
       "properties": {
@@ -23,7 +23,7 @@
       },
       "required": ["username", "password"],
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "UsuarioAPI": {
       "properties": {
@@ -39,7 +39,7 @@
       },
       "required": ["id", "username", "role"],
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "UsuarioCreationRequest": {
       "properties": {
@@ -55,7 +55,7 @@
       },
       "required": ["username", "password", "role"],
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "UsuarioUpdateRequest": {
       "properties": {
@@ -69,7 +69,7 @@
         }
       },
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": false
     }
   },
   "info": {

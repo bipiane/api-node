@@ -16,7 +16,7 @@ const models: TsoaRoute.Models = {
     properties: {
       token: {dataType: 'string', required: true},
     },
-    additionalProperties: true,
+    additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   LoginRequest: {
@@ -25,7 +25,7 @@ const models: TsoaRoute.Models = {
       username: {dataType: 'string', required: true},
       password: {dataType: 'string', required: true},
     },
-    additionalProperties: true,
+    additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UsuarioAPI: {
@@ -35,7 +35,7 @@ const models: TsoaRoute.Models = {
       username: {dataType: 'string', required: true},
       role: {dataType: 'string', required: true},
     },
-    additionalProperties: true,
+    additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UsuarioCreationRequest: {
@@ -45,7 +45,7 @@ const models: TsoaRoute.Models = {
       password: {dataType: 'string', required: true},
       role: {dataType: 'string', required: true},
     },
-    additionalProperties: true,
+    additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UsuarioUpdateRequest: {
@@ -54,7 +54,7 @@ const models: TsoaRoute.Models = {
       username: {dataType: 'string'},
       role: {dataType: 'string'},
     },
-    additionalProperties: true,
+    additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -231,22 +231,27 @@ export function RegisterRoutes(app: express.Express) {
           return request;
         case 'query':
           return validationService.ValidateParam(args[key], request.query[name], name, fieldErrors, undefined, {
+            noImplicitAdditionalProperties: 'throw-on-extras',
             specVersion: 2,
           });
         case 'path':
           return validationService.ValidateParam(args[key], request.params[name], name, fieldErrors, undefined, {
+            noImplicitAdditionalProperties: 'throw-on-extras',
             specVersion: 2,
           });
         case 'header':
           return validationService.ValidateParam(args[key], request.header(name), name, fieldErrors, undefined, {
+            noImplicitAdditionalProperties: 'throw-on-extras',
             specVersion: 2,
           });
         case 'body':
           return validationService.ValidateParam(args[key], request.body, name, fieldErrors, name + '.', {
+            noImplicitAdditionalProperties: 'throw-on-extras',
             specVersion: 2,
           });
         case 'body-prop':
           return validationService.ValidateParam(args[key], request.body[name], name, fieldErrors, 'body.', {
+            noImplicitAdditionalProperties: 'throw-on-extras',
             specVersion: 2,
           });
       }
