@@ -3,7 +3,12 @@ import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
 import {Usuario} from '../../entity/Usuario';
-import {UsuarioCreationRequest, UsuarioUpdateRequest, UsuarioAPI} from './utilidades/UsuarioAPI';
+import {
+  UsuarioCreationRequest,
+  UsuarioUpdateRequest,
+  UsuarioResponseData,
+  UsuarioResponseLista,
+} from './utilidades/UsuarioAPI';
 
 /**
  * @TODO Implementar midleware de seguridad: [checkJwt, checkRole(['ADMIN'])]
@@ -16,13 +21,11 @@ export class UsuarioController {
    */
   @Get()
   @OperationId('findAllUsuarios')
-  async index(): Promise<UsuarioAPI[]> {
+  async index(): Promise<UsuarioResponseLista> {
     const userRepository = getRepository(Usuario);
     const lista = await userRepository.find();
 
-    return lista.map(u => {
-      return new UsuarioAPI(u);
-    });
+    return new UsuarioResponseLista(lista);
   }
 
   /**
@@ -31,7 +34,7 @@ export class UsuarioController {
    */
   @Get('{id}')
   @OperationId('findUsuario')
-  async show(id: string): Promise<UsuarioAPI> {
+  async show(id: string): Promise<UsuarioResponseData> {
     const userRepository = getRepository(Usuario);
     const usuario = await userRepository.findOne(id);
 
@@ -39,7 +42,7 @@ export class UsuarioController {
     //   return DataResponse.dataError('Usuario no encontrado', 404);
     // }
 
-    return new UsuarioAPI(usuario);
+    return new UsuarioResponseData(usuario);
   }
 
   /**
@@ -49,7 +52,7 @@ export class UsuarioController {
   @Post()
   @OperationId('saveUsuario')
   @SuccessResponse('201', 'Usuario creado correctamente')
-  async save(@Body() data: UsuarioCreationRequest): Promise<UsuarioAPI> {
+  async save(@Body() data: UsuarioCreationRequest): Promise<UsuarioResponseData> {
     let {username, password, role} = data;
     let user = new Usuario();
     user.username = username;
@@ -74,8 +77,8 @@ export class UsuarioController {
       // res.status(409).send('username already in use');
       return;
     }
-
-    return user;
+    // @TODO Retornar status code 201
+    return new UsuarioResponseData(user, 201, 'Usuario creado correctamente');
   }
 
   /**
@@ -85,7 +88,7 @@ export class UsuarioController {
    */
   @Put('{id}')
   @OperationId('updateUsuario')
-  async update(id: string, @Body() data: UsuarioUpdateRequest): Promise<UsuarioAPI> {
+  async update(id: string, @Body() data: UsuarioUpdateRequest): Promise<UsuarioResponseData> {
     const {username, role} = data;
 
     //Try to find user on database
@@ -120,7 +123,7 @@ export class UsuarioController {
     }
     //After all send a 204 (no content, but accepted) response
     // res.status(204).send();
-    return new UsuarioAPI(user);
+    return new UsuarioResponseData(user, 200, 'Usuario actualizado correctamente');
   }
 
   /**

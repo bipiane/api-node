@@ -38,6 +38,30 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  UsuarioResponseLista: {
+    dataType: 'refObject',
+    properties: {
+      result: {dataType: 'string', default: 'ok'},
+      status: {dataType: 'double', default: 200},
+      data: {dataType: 'array', array: {ref: 'UsuarioAPI'}, required: true},
+      userMessage: {dataType: 'string', required: true},
+      actions: {dataType: 'string', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  UsuarioResponseData: {
+    dataType: 'refObject',
+    properties: {
+      result: {dataType: 'string', default: 'ok'},
+      status: {dataType: 'double', default: 200},
+      data: {ref: 'UsuarioAPI', required: true},
+      userMessage: {dataType: 'string', required: true},
+      actions: {dataType: 'string', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   UsuarioCreationRequest: {
     dataType: 'refObject',
     properties: {

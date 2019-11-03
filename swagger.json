@@ -45,6 +45,63 @@
       "type": "object",
       "additionalProperties": false
     },
+    "UsuarioResponseLista": {
+      "properties": {
+        "result": {
+          "type": "string",
+          "default": "ok",
+          "x-nullable": true
+        },
+        "status": {
+          "type": "number",
+          "format": "double",
+          "default": 200,
+          "x-nullable": true
+        },
+        "data": {
+          "items": {
+            "$ref": "#/definitions/UsuarioAPI"
+          },
+          "type": "array"
+        },
+        "userMessage": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "string"
+        }
+      },
+      "required": ["data", "userMessage", "actions"],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "UsuarioResponseData": {
+      "properties": {
+        "result": {
+          "type": "string",
+          "default": "ok",
+          "x-nullable": true
+        },
+        "status": {
+          "type": "number",
+          "format": "double",
+          "default": 200,
+          "x-nullable": true
+        },
+        "data": {
+          "$ref": "#/definitions/UsuarioAPI"
+        },
+        "userMessage": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "string"
+        }
+      },
+      "required": ["data", "userMessage", "actions"],
+      "type": "object",
+      "additionalProperties": false
+    },
     "UsuarioCreationRequest": {
       "properties": {
         "username": {
@@ -117,10 +174,7 @@
           "200": {
             "description": "Ok",
             "schema": {
-              "items": {
-                "$ref": "#/definitions/UsuarioAPI"
-              },
-              "type": "array"
+              "$ref": "#/definitions/UsuarioResponseLista"
             }
           }
         },
@@ -136,7 +190,7 @@
           "201": {
             "description": "Usuario creado correctamente",
             "schema": {
-              "$ref": "#/definitions/UsuarioAPI"
+              "$ref": "#/definitions/UsuarioResponseData"
             }
           }
         },
@@ -163,7 +217,7 @@
           "200": {
             "description": "Ok",
             "schema": {
-              "$ref": "#/definitions/UsuarioAPI"
+              "$ref": "#/definitions/UsuarioResponseData"
             }
           }
         },
@@ -186,7 +240,7 @@
           "200": {
             "description": "Ok",
             "schema": {
-              "$ref": "#/definitions/UsuarioAPI"
+              "$ref": "#/definitions/UsuarioResponseData"
             }
           }
         },
