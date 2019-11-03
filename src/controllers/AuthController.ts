@@ -7,6 +7,13 @@ import {Usuario} from '../entity/Usuario';
 import config from '../config/config';
 import {Body, OperationId, Post, Route, Tags} from 'tsoa';
 
+/**
+ * @example
+ * {
+ *   "username": "ipianetti",
+ *   "password": "123"
+ * }
+ */
 export interface LoginRequest {
   username: string;
   password: string;

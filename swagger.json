@@ -23,7 +23,11 @@
       },
       "required": ["username", "password"],
       "type": "object",
-      "additionalProperties": false
+      "additionalProperties": false,
+      "example": {
+        "username": "ipianetti",
+        "password": "123"
+      }
     },
     "UsuarioAPI": {
       "properties": {
