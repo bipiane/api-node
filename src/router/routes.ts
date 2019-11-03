@@ -69,7 +69,7 @@ export function RegisterRoutes(app: express.Express) {
   // ###########################################################################################################
   app.post('/login', function(request: any, response: any, next: any) {
     const args = {
-      requestBody: {in: 'body', name: 'requestBody', required: true, ref: 'LoginRequest'},
+      data: {in: 'body', name: 'data', required: true, ref: 'LoginRequest'},
     };
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -127,7 +127,7 @@ export function RegisterRoutes(app: express.Express) {
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.post('/api/v1/usuarios', function(request: any, response: any, next: any) {
     const args = {
-      requestBody: {in: 'body', name: 'requestBody', required: true, ref: 'UsuarioCreationRequest'},
+      data: {in: 'body', name: 'data', required: true, ref: 'UsuarioCreationRequest'},
     };
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -148,7 +148,7 @@ export function RegisterRoutes(app: express.Express) {
   app.put('/api/v1/usuarios/:id', function(request: any, response: any, next: any) {
     const args = {
       id: {in: 'path', name: 'id', required: true, dataType: 'string'},
-      requestBody: {in: 'body', name: 'requestBody', required: true, ref: 'UsuarioUpdateRequest'},
+      data: {in: 'body', name: 'data', required: true, ref: 'UsuarioUpdateRequest'},
     };
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

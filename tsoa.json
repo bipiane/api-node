@@ -1,13 +1,13 @@
 {
   "swagger": {
     "outputDirectory": ".",
-    "entryFile": "./src/index.ts",
+    "entryFile": "./src/app.ts",
     "noImplicitAdditionalProperties": "throw-on-extras"
   },
   "routes": {
     "basePath": "/",
     "controllerPathGlobs": ["./src/controllers/**/*Controller.ts"],
-    "entryFile": "./src/index.ts",
+    "entryFile": "./src/app.ts",
     "routesDir": "./src/router"
   }
 }

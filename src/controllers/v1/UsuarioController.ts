@@ -11,6 +11,9 @@ import {UsuarioCreationRequest, UsuarioUpdateRequest, UsuarioAPI} from './utilid
 @Tags('Usuario')
 @Route('api/v1/usuarios')
 export class UsuarioController {
+  /**
+   * @summary Obtiene una lista de usuarios
+   */
   @Get()
   @OperationId('findAllUsuarios')
   async index(): Promise<UsuarioAPI[]> {
@@ -22,6 +25,10 @@ export class UsuarioController {
     });
   }
 
+  /**
+   * @summary Obtiene un usuario por ID
+   * @param id
+   */
   @Get('{id}')
   @OperationId('findUsuario')
   async show(id: string): Promise<UsuarioAPI> {
@@ -35,11 +42,15 @@ export class UsuarioController {
     return new UsuarioAPI(usuario);
   }
 
+  /**
+   * @summary Permite crear un usuario
+   * @param data
+   */
   @Post()
   @OperationId('saveUsuario')
   @SuccessResponse('201', 'Usuario creado correctamente')
-  async save(@Body() requestBody: UsuarioCreationRequest): Promise<UsuarioAPI> {
-    let {username, password, role} = requestBody;
+  async save(@Body() data: UsuarioCreationRequest): Promise<UsuarioAPI> {
+    let {username, password, role} = data;
     let user = new Usuario();
     user.username = username;
     user.password = password;
@@ -67,10 +78,15 @@ export class UsuarioController {
     return user;
   }
 
+  /**
+   * @summary Permite actualizar un usuario por ID
+   * @param id
+   * @param data
+   */
   @Put('{id}')
   @OperationId('updateUsuario')
-  async update(id: string, @Body() requestBody: UsuarioUpdateRequest): Promise<UsuarioAPI> {
-    const {username, role} = requestBody;
+  async update(id: string, @Body() data: UsuarioUpdateRequest): Promise<UsuarioAPI> {
+    const {username, role} = data;
 
     //Try to find user on database
     const userRepository = getRepository(Usuario);
@@ -107,6 +123,10 @@ export class UsuarioController {
     return new UsuarioAPI(user);
   }
 
+  /**
+   * @summary Permite borrar un usuario por ID
+   * @param id
+   */
   @Delete('{id}')
   @OperationId('deleteUsuario')
   async delete(id: string): Promise<true> {

@@ -94,12 +94,13 @@
             }
           }
         },
+        "summary": "Obtención de Token JWT",
         "tags": ["Auth"],
         "security": [],
         "parameters": [
           {
             "in": "body",
-            "name": "requestBody",
+            "name": "data",
             "required": true,
             "schema": {
               "$ref": "#/definitions/LoginRequest"
@@ -123,6 +124,7 @@
             }
           }
         },
+        "summary": "Obtiene una lista de usuarios",
         "tags": ["Usuario"],
         "security": [],
         "parameters": []
@@ -138,12 +140,13 @@
             }
           }
         },
+        "summary": "Permite crear un usuario",
         "tags": ["Usuario"],
         "security": [],
         "parameters": [
           {
             "in": "body",
-            "name": "requestBody",
+            "name": "data",
             "required": true,
             "schema": {
               "$ref": "#/definitions/UsuarioCreationRequest"
@@ -164,6 +167,7 @@
             }
           }
         },
+        "summary": "Obtiene un usuario por ID",
         "tags": ["Usuario"],
         "security": [],
         "parameters": [
@@ -186,6 +190,7 @@
             }
           }
         },
+        "summary": "Permite actualizar un usuario por ID",
         "tags": ["Usuario"],
         "security": [],
         "parameters": [
@@ -197,7 +202,7 @@
           },
           {
             "in": "body",
-            "name": "requestBody",
+            "name": "data",
             "required": true,
             "schema": {
               "$ref": "#/definitions/UsuarioUpdateRequest"
@@ -217,6 +222,7 @@
             }
           }
         },
+        "summary": "Permite borrar un usuario por ID",
         "tags": ["Usuario"],
         "security": [],
         "parameters": [

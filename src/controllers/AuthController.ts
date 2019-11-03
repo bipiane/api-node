@@ -30,10 +30,13 @@ export class TokenAPI {
 @Tags('Auth')
 @Route('/')
 export class AuthController {
+  /**
+   * @summary Obtención de Token JWT
+   */
   @Post('login')
   @OperationId('login')
-  async login(@Body() requestBody: LoginRequest): Promise<TokenAPI> {
-    let {username, password} = requestBody;
+  async login(@Body() data: LoginRequest): Promise<TokenAPI> {
+    let {username, password} = data;
     if (!(username && password)) {
       // res.status(400).send();
     }
