@@ -31,7 +31,16 @@ Ejecutar migración para crear usuarios iniciales
 
 ```
 npm run migration:run
-```
+``` 
+
+## Development
+Ejecutar luego de editar controladores y entidades 
+
+``` 
+# Creará las rutas de api y su swagger.json,
+# según la configuración tsoa.json
+npm run tsoa:gen
+``` 
 
 ## Contributing
 
