@@ -1,0 +1,7 @@
+# App
+export APP_PORT=3000
+
+# MongoDB
+export DB_HOST=localhost
+export DB_PORT=27017
+export DB_NAME=test_node
