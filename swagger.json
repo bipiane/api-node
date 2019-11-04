@@ -102,6 +102,37 @@
       "type": "object",
       "additionalProperties": false
     },
+    "ErrorResponse": {
+      "properties": {
+        "stack": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "result": {
+          "type": "string",
+          "enum": ["error"]
+        },
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "userMessage": {
+          "type": "string"
+        },
+        "developerMessage": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["result", "status", "userMessage", "developerMessage", "validationErrors"],
+      "type": "object",
+      "additionalProperties": false
+    },
     "UsuarioCreationRequest": {
       "properties": {
         "username": {
@@ -218,6 +249,12 @@
             "description": "Ok",
             "schema": {
               "$ref": "#/definitions/UsuarioResponseData"
+            }
+          },
+          "404": {
+            "description": "No se encontró usuario con ID 123",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },

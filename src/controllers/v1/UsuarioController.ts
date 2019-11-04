@@ -1,4 +1,4 @@
-import {Body, Delete, Get, OperationId, Post, Put, Route, SuccessResponse, Tags} from 'tsoa';
+import {Body, Controller, Delete, Get, OperationId, Post, Put, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
@@ -9,13 +9,14 @@ import {
   UsuarioResponseData,
   UsuarioResponseLista,
 } from './utilidades/UsuarioAPI';
+import {ErrorResponse} from './utilidades/ErrorResponse';
 
 /**
  * @TODO Implementar midleware de seguridad: [checkJwt, checkRole(['ADMIN'])]
  */
 @Tags('Usuario')
 @Route('api/v1/usuarios')
-export class UsuarioController {
+export class UsuarioController extends Controller {
   /**
    * @summary Obtiene una lista de usuarios
    */
@@ -33,14 +34,16 @@ export class UsuarioController {
    * @param id
    */
   @Get('{id}')
+  @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
   @OperationId('findUsuario')
   async show(id: string): Promise<UsuarioResponseData> {
     const userRepository = getRepository(Usuario);
     const usuario = await userRepository.findOne(id);
 
-    // if (!usuario) {
-    //   return DataResponse.dataError('Usuario no encontrado', 404);
-    // }
+    if (!usuario) {
+      this.setStatus(404);
+      throw new ErrorResponse(`No se encontró usuario con ID ${id}`, 404);
+    }
 
     return new UsuarioResponseData(usuario);
   }
@@ -63,6 +66,7 @@ export class UsuarioController {
     const errors = await validate(user);
     if (errors.length > 0) {
       // res.status(400).send(errors);
+      this.setStatus(400);
       return;
     }
 
@@ -75,9 +79,11 @@ export class UsuarioController {
       await userRepository.save(user);
     } catch (e) {
       // res.status(409).send('username already in use');
+      this.setStatus(409);
       return;
     }
-    // @TODO Retornar status code 201
+
+    this.setStatus(201);
     return new UsuarioResponseData(user, 201, 'Usuario creado correctamente');
   }
 
@@ -100,6 +106,7 @@ export class UsuarioController {
       console.log('Usuario no encontrado: ', error);
       //If not found, send a 404 response
       // res.status(404).send('User not found');
+      this.setStatus(404);
       return;
     }
 
@@ -110,6 +117,7 @@ export class UsuarioController {
     if (errors.length > 0) {
       console.log('Error validación: ', errors);
       // res.status(400).send(errors);
+      this.setStatus(400);
       return;
     }
 
@@ -119,6 +127,7 @@ export class UsuarioController {
     } catch (e) {
       console.log('Excepción al guardar: ', e);
       // res.status(409).send('username already in use');
+      this.setStatus(409);
       return;
     }
     //After all send a 204 (no content, but accepted) response
@@ -138,12 +147,14 @@ export class UsuarioController {
       await userRepository.findOneOrFail(id);
     } catch (error) {
       // res.status(404).send('User not found');
+      this.setStatus(404);
       return;
     }
     await userRepository.delete(id);
 
     //After all send a 204 (no content, but accepted) response
     // res.status(204).send();
+    this.setStatus(204);
     return true;
   }
 }

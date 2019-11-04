@@ -7,6 +7,7 @@ import * as cors from 'cors';
 import {RegisterRoutes} from './router/routes';
 import {MongoConnectionOptions} from 'typeorm/driver/mongodb/MongoConnectionOptions';
 const swaggerUi = require('swagger-ui-express');
+import * as errorHandler from 'api-error-handler';
 
 // Obtenemos variables de .env
 const port = process.env.APP_PORT || 3000;
@@ -35,6 +36,9 @@ getConnectionOptions().then((connectionOptions: MongoConnectionOptions) => {
 
       // Cargamos todas las rutas generadas por TSOA
       RegisterRoutes(app);
+
+      // Tratamos los errores de API
+      app.use(errorHandler());
 
       // Cargamos la documentación Swagger generada
       try {

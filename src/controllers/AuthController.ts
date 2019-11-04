@@ -5,7 +5,7 @@ import {validate} from 'class-validator';
 
 import {Usuario} from '../entity/Usuario';
 import config from '../config/config';
-import {Body, OperationId, Post, Route, Tags} from 'tsoa';
+import {Body, Controller, OperationId, Post, Route, Tags} from 'tsoa';
 
 /**
  * @example
@@ -29,7 +29,7 @@ export class TokenAPI {
 
 @Tags('Auth')
 @Route('/')
-export class AuthController {
+export class AuthController extends Controller {
   /**
    * @summary Obtención de Token JWT
    */
@@ -38,7 +38,7 @@ export class AuthController {
   async login(@Body() data: LoginRequest): Promise<TokenAPI> {
     let {username, password} = data;
     if (!(username && password)) {
-      // res.status(400).send();
+      this.setStatus(400);
     }
 
     //Get user from database
@@ -47,12 +47,13 @@ export class AuthController {
     try {
       user = await userRepository.findOneOrFail({where: {username}});
     } catch (error) {
-      // res.status(401).send();
+      this.setStatus(401);
+      return;
     }
 
     //Check if encrypted password match
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      // res.status(401).send();
+      this.setStatus(401);
       return;
     }
 
@@ -62,7 +63,6 @@ export class AuthController {
     });
 
     //Send the jwt in the response
-    // res.send(token);
     return new TokenAPI(token);
   }
 
