@@ -211,7 +211,11 @@
         },
         "summary": "Obtiene una lista de usuarios",
         "tags": ["Usuario"],
-        "security": [],
+        "security": [
+          {
+            "access_token": ["SUPER_ADMIN"]
+          }
+        ],
         "parameters": []
       },
       "post": {
@@ -227,7 +231,11 @@
         },
         "summary": "Permite crear un usuario",
         "tags": ["Usuario"],
-        "security": [],
+        "security": [
+          {
+            "access_token": ["SUPER_ADMIN"]
+          }
+        ],
         "parameters": [
           {
             "in": "body",
@@ -260,7 +268,11 @@
         },
         "summary": "Obtiene un usuario por ID",
         "tags": ["Usuario"],
-        "security": [],
+        "security": [
+          {
+            "access_token": ["SUPER_ADMIN"]
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -283,7 +295,11 @@
         },
         "summary": "Permite actualizar un usuario por ID",
         "tags": ["Usuario"],
-        "security": [],
+        "security": [
+          {
+            "access_token": ["SUPER_ADMIN"]
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -315,7 +331,11 @@
         },
         "summary": "Permite borrar un usuario por ID",
         "tags": ["Usuario"],
-        "security": [],
+        "security": [
+          {
+            "access_token": ["SUPER_ADMIN"]
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -329,5 +349,12 @@
   },
   "produces": ["application/json"],
   "swagger": "2.0",
-  "securityDefinitions": {}
+  "securityDefinitions": {
+    "access_token": {
+      "name": "Authorization",
+      "type": "apiKey",
+      "in": "header",
+      "description": "Access Token JWT"
+    }
+  }
 }

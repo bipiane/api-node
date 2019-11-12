@@ -2,10 +2,19 @@
   "swagger": {
     "outputDirectory": ".",
     "entryFile": "./src/app.ts",
-    "noImplicitAdditionalProperties": "throw-on-extras"
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "securityDefinitions": {
+      "access_token": {
+        "name": "Authorization",
+        "type": "apiKey",
+        "in": "header",
+        "description": "Access Token JWT"
+      }
+    }
   },
   "routes": {
     "basePath": "/",
+    "authenticationModule": "./authentication.ts",
     "controllerPathGlobs": ["./src/controllers/**/*Controller.ts"],
     "entryFile": "./src/app.ts",
     "routesDir": "./src/router"

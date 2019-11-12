@@ -6,6 +6,7 @@ import {Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute} fr
 import {AuthController} from './../controllers/AuthController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import {UsuarioController} from './../controllers/v1/UsuarioController';
+import {expressAuthentication} from './../../authentication';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -124,7 +125,11 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get('/api/v1/usuarios', function(request: any, response: any, next: any) {
+  app.get('/api/v1/usuarios', authenticateMiddleware([{access_token: ['SUPER_ADMIN']}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
     const args = {};
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -142,7 +147,11 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get('/api/v1/usuarios/:id', function(request: any, response: any, next: any) {
+  app.get('/api/v1/usuarios/:id', authenticateMiddleware([{access_token: ['SUPER_ADMIN']}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
     const args = {
       id: {in: 'path', name: 'id', required: true, dataType: 'string'},
     };
@@ -162,7 +171,11 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/usuarios', function(request: any, response: any, next: any) {
+  app.post('/api/v1/usuarios', authenticateMiddleware([{access_token: ['SUPER_ADMIN']}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
     const args = {
       data: {in: 'body', name: 'data', required: true, ref: 'UsuarioCreationRequest'},
     };
@@ -182,7 +195,11 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.put('/api/v1/usuarios/:id', function(request: any, response: any, next: any) {
+  app.put('/api/v1/usuarios/:id', authenticateMiddleware([{access_token: ['SUPER_ADMIN']}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
     const args = {
       id: {in: 'path', name: 'id', required: true, dataType: 'string'},
       data: {in: 'body', name: 'data', required: true, ref: 'UsuarioUpdateRequest'},
@@ -203,7 +220,11 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.delete('/api/v1/usuarios/:id', function(request: any, response: any, next: any) {
+  app.delete('/api/v1/usuarios/:id', authenticateMiddleware([{access_token: ['SUPER_ADMIN']}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
     const args = {
       id: {in: 'path', name: 'id', required: true, dataType: 'string'},
     };
@@ -225,6 +246,56 @@ export function RegisterRoutes(app: express.Express) {
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+  function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
+    return (request: any, _response: any, next: any) => {
+      let responded = 0;
+      let success = false;
+
+      const succeed = function(user: any) {
+        if (!success) {
+          success = true;
+          responded++;
+          request['user'] = user;
+          next();
+        }
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      const fail = function(error: any) {
+        responded++;
+        if (responded == security.length && !success) {
+          error.status = error.status || 401;
+          next(error);
+        }
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      for (const secMethod of security) {
+        if (Object.keys(secMethod).length > 1) {
+          let promises: Promise<any>[] = [];
+
+          for (const name in secMethod) {
+            promises.push(expressAuthentication(request, name, secMethod[name]));
+          }
+
+          Promise.all(promises)
+            .then(users => {
+              succeed(users[0]);
+            })
+            .catch(fail);
+        } else {
+          for (const name in secMethod) {
+            expressAuthentication(request, name, secMethod[name])
+              .then(succeed)
+              .catch(fail);
+          }
+        }
+      }
+    };
+  }
 
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 

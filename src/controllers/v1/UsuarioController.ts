@@ -1,4 +1,17 @@
-import {Body, Controller, Delete, Get, OperationId, Post, Put, Response, Route, SuccessResponse, Tags} from 'tsoa';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  OperationId,
+  Post,
+  Put,
+  Response,
+  Route,
+  Security,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
@@ -21,6 +34,7 @@ export class UsuarioController extends Controller {
    * @summary Obtiene una lista de usuarios
    */
   @Get()
+  @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('findAllUsuarios')
   async index(): Promise<UsuarioResponseLista> {
     const userRepository = getRepository(Usuario);
@@ -34,6 +48,7 @@ export class UsuarioController extends Controller {
    * @param id
    */
   @Get('{id}')
+  @Security('access_token', ['SUPER_ADMIN'])
   @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
   @OperationId('findUsuario')
   async show(id: string): Promise<UsuarioResponseData> {
@@ -53,6 +68,7 @@ export class UsuarioController extends Controller {
    * @param data
    */
   @Post()
+  @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('saveUsuario')
   @SuccessResponse('201', 'Usuario creado correctamente')
   async save(@Body() data: UsuarioCreationRequest): Promise<UsuarioResponseData> {
@@ -93,6 +109,7 @@ export class UsuarioController extends Controller {
    * @param data
    */
   @Put('{id}')
+  @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('updateUsuario')
   async update(id: string, @Body() data: UsuarioUpdateRequest): Promise<UsuarioResponseData> {
     const {username, role} = data;
@@ -140,6 +157,7 @@ export class UsuarioController extends Controller {
    * @param id
    */
   @Delete('{id}')
+  @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('deleteUsuario')
   async delete(id: string): Promise<true> {
     const userRepository = getRepository(Usuario);
