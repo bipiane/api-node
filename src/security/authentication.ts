@@ -1,8 +1,8 @@
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
-import config from './src/config/config';
+import config from '../config/config';
 import {getRepository} from 'typeorm';
-import {Usuario} from './src/entity/Usuario';
+import {Usuario} from '../entity/Usuario';
 
 export function expressAuthentication(request: express.Request, securityName: string, scopes?: string[]): Promise<any> {
   if (securityName === 'access_token') {

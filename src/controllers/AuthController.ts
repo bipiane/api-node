@@ -31,6 +31,16 @@ export interface ChangePasswordRequest {
   oldPassword: string;
 }
 
+export class TokenPayload {
+  userId: string;
+  username: string;
+
+  constructor(user: Usuario) {
+    this.userId = user.id;
+    this.username = user.username;
+  }
+}
+
 export class TokenAPI {
   token: string;
 
@@ -71,7 +81,7 @@ export class AuthController extends Controller {
     }
 
     //Sing JWT, valid for 1 hour
-    const token = jwt.sign({userId: user.id, username: user.username}, config.jwtSecret, {
+    const token = jwt.sign(new TokenPayload(user), config.jwtSecret, {
       expiresIn: '1h',
     });
 
@@ -88,7 +98,7 @@ export class AuthController extends Controller {
   @OperationId('changePassword')
   async changePassword(@Request() request: any, @Body() data: ChangePasswordRequest) {
     //Get ID from JWT
-    const id = request.user.userId;
+    const userJWT: TokenPayload = request.user;
 
     const {oldPassword, newPassword} = data;
     if (!(oldPassword && newPassword)) {
@@ -100,7 +110,7 @@ export class AuthController extends Controller {
     const userRepository = getRepository(Usuario);
     let user: Usuario;
     try {
-      user = await userRepository.findOneOrFail(id);
+      user = await userRepository.findOneOrFail(userJWT.userId);
     } catch (id) {
       this.setStatus(401);
       throw new ErrorResponse(`Usuario incorrecto`, 401);

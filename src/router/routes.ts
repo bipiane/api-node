@@ -6,7 +6,7 @@ import {Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute} fr
 import {AuthController} from './../controllers/AuthController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import {UsuarioController} from './../controllers/v1/UsuarioController';
-import {expressAuthentication} from './../../authentication';
+import {expressAuthentication} from './../security/authentication';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

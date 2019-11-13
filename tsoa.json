@@ -14,7 +14,7 @@
   },
   "routes": {
     "basePath": "/",
-    "authenticationModule": "./authentication.ts",
+    "authenticationModule": "./src/security/authentication.ts",
     "controllerPathGlobs": ["./src/controllers/**/*Controller.ts"],
     "entryFile": "./src/app.ts",
     "routesDir": "./src/router"
