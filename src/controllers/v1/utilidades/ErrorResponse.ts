@@ -5,6 +5,13 @@ export class ErrorResponse extends Error {
   developerMessage: string;
   validationErrors: string[];
 
+  /**
+   * @TODO Formatear mensajes de error
+   * @param userMessage
+   * @param status
+   * @param developerMessage
+   * @param validationErrors
+   */
   constructor(userMessage: string, status: number, developerMessage: string = null, validationErrors: string[] = []) {
     super();
     // Ocultamos stack trace
