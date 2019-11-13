@@ -17,7 +17,7 @@ export class CreateAdminUser1547919837483 implements MigrationInterface {
 
     user = new Usuario();
     user.username = 'ipianetti';
-    user.password = '123';
+    user.password = '1234';
     user.hashPassword();
     user.role = 'SUPER_ADMIN';
     exist = await userRepository.findOne({where: {username: user.username}});

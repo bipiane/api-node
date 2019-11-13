@@ -1,6 +1,6 @@
 {
   "swagger": {
-    "outputDirectory": ".",
+    "outputDirectory": "./apiDoc",
     "entryFile": "./src/app.ts",
     "noImplicitAdditionalProperties": "throw-on-extras",
     "securityDefinitions": {

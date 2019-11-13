@@ -32,8 +32,8 @@ const models: TsoaRoute.Models = {
   ChangePasswordRequest: {
     dataType: 'refObject',
     properties: {
-      newPassword: {dataType: 'string', required: true},
       oldPassword: {dataType: 'string', required: true},
+      newPassword: {dataType: 'string', required: true},
     },
     additionalProperties: false,
   },

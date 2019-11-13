@@ -30,7 +30,7 @@ createConnection()
 
     // Cargamos la documentación Swagger generada
     try {
-      const swaggerDoc = require('../swagger.json');
+      const swaggerDoc = require('../apiDoc/swagger.json');
       // Exponemos documentación SwaggerUI en la siguiente URL
       app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
     } catch (error) {

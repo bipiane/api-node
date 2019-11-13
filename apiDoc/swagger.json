@@ -26,24 +26,24 @@
       "additionalProperties": false,
       "example": {
         "username": "ipianetti",
-        "password": "123"
+        "password": "1234"
       }
     },
     "ChangePasswordRequest": {
       "properties": {
-        "newPassword": {
+        "oldPassword": {
           "type": "string"
         },
-        "oldPassword": {
+        "newPassword": {
           "type": "string"
         }
       },
-      "required": ["newPassword", "oldPassword"],
+      "required": ["oldPassword", "newPassword"],
       "type": "object",
       "additionalProperties": false,
       "example": {
-        "newPassword": "123",
-        "oldPassword": "asdf"
+        "oldPassword": "asdf",
+        "newPassword": "1234"
       }
     },
     "UsuarioAPI": {

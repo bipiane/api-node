@@ -11,7 +11,7 @@ import {ErrorResponse} from './v1/utilidades/ErrorResponse';
  * @example
  * {
  *   "username": "ipianetti",
- *   "password": "123"
+ *   "password": "1234"
  * }
  */
 export interface LoginRequest {
@@ -22,13 +22,13 @@ export interface LoginRequest {
 /**
  * @example
  * {
- *   "newPassword": "123",
- *   "oldPassword": "asdf"
+ *   "oldPassword": "asdf",
+ *   "newPassword": "1234"
  * }
  */
 export interface ChangePasswordRequest {
-  newPassword: string;
   oldPassword: string;
+  newPassword: string;
 }
 
 export class TokenPayload {
@@ -81,7 +81,8 @@ export class AuthController extends Controller {
     }
 
     //Sing JWT, valid for 1 hour
-    const token = jwt.sign(new TokenPayload(user), config.jwtSecret, {
+    const payload = new TokenPayload(user);
+    const token = jwt.sign(Object.assign({}, payload), config.jwtSecret, {
       expiresIn: '1h',
     });
 
@@ -127,6 +128,7 @@ export class AuthController extends Controller {
     const errors = await validate(user);
     if (errors.length > 0) {
       // @TODO Retornar errores de validación
+      console.log('errors: ', errors);
       this.setStatus(400);
       return;
     }

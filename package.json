@@ -8,7 +8,7 @@
     "tsoa:gen": "tsoa routes && tsoa swagger && npm run prettier",
     "prod": "tsc && node ./build/app.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "prettier": "prettier --config ./.prettierrc --write \"src/**/*{.ts,.js,.json,.css,.scss,.html}\" \"*.json\" "
+    "prettier": "prettier --config ./.prettierrc --write \"src/**/*{.ts,.js,.json,.css,.scss,.html}\" \"*.json\" \"apiDoc/*.json\" "
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
