@@ -1,11 +1,10 @@
-import {Request, Response} from 'express';
 import * as jwt from 'jsonwebtoken';
 import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
 import {Usuario} from '../entity/Usuario';
 import config from '../config/config';
-import {Body, Controller, OperationId, Post, Route, Tags} from 'tsoa';
+import {Body, Controller, OperationId, Post, Put, Request, Route, Security, Tags} from 'tsoa';
 
 /**
  * @example
@@ -17,6 +16,18 @@ import {Body, Controller, OperationId, Post, Route, Tags} from 'tsoa';
 export interface LoginRequest {
   username: string;
   password: string;
+}
+
+/**
+ * @example
+ * {
+ *   "newPassword": "123",
+ *   "oldPassword": "asdf"
+ * }
+ */
+export interface ChangePasswordRequest {
+  newPassword: string;
+  oldPassword: string;
 }
 
 export class TokenAPI {
@@ -66,14 +77,18 @@ export class AuthController extends Controller {
     return new TokenAPI(token);
   }
 
-  static changePassword = async (req: Request, res: Response) => {
+  /**
+   * @summary Modificar clave
+   */
+  @Put('changePassword')
+  @Security('access_token')
+  @OperationId('changePassword')
+  async changePassword(@Request() request: any, @Body() data: ChangePasswordRequest) {
     //Get ID from JWT
-    const id = res.locals.jwtPayload.userId;
+    const id = request.user.userId;
 
-    //Get parameters from the body
-    const {oldPassword, newPassword} = req.body;
-    if (!(oldPassword && newPassword)) {
-      res.status(400).send();
+    if (!(data.oldPassword && data.newPassword)) {
+      this.setStatus(400);
     }
 
     //Get user from the database
@@ -82,26 +97,27 @@ export class AuthController extends Controller {
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (id) {
-      res.status(401).send();
+      this.setStatus(401);
     }
 
     //Check if old password matchs
-    if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      res.status(401).send();
+    if (!user.checkIfUnencryptedPasswordIsValid(data.oldPassword)) {
+      this.setStatus(401);
       return;
     }
 
     //Validate de model (password lenght)
-    user.password = newPassword;
+    user.password = data.newPassword;
     const errors = await validate(user);
     if (errors.length > 0) {
-      res.status(400).send(errors);
+      this.setStatus(400);
       return;
     }
+
     //Hash the new password and save
     user.hashPassword();
-    userRepository.save(user);
+    await userRepository.save(user);
 
-    res.status(204).send();
-  };
+    this.setStatus(204);
+  }
 }

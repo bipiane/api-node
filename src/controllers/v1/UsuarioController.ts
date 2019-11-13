@@ -24,9 +24,6 @@ import {
 } from './utilidades/UsuarioAPI';
 import {ErrorResponse} from './utilidades/ErrorResponse';
 
-/**
- * @TODO Implementar midleware de seguridad: [checkJwt, checkRole(['ADMIN'])]
- */
 @Tags('Usuario')
 @Route('api/v1/usuarios')
 export class UsuarioController extends Controller {
