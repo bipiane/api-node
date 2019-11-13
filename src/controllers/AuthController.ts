@@ -5,6 +5,7 @@ import {validate} from 'class-validator';
 import {Usuario} from '../entity/Usuario';
 import config from '../config/config';
 import {Body, Controller, OperationId, Post, Put, Request, Route, Security, Tags} from 'tsoa';
+import {ErrorResponse} from './v1/utilidades/ErrorResponse';
 
 /**
  * @example
@@ -50,6 +51,7 @@ export class AuthController extends Controller {
     let {username, password} = data;
     if (!(username && password)) {
       this.setStatus(400);
+      throw new ErrorResponse(`Username y password son requeridos`, 400);
     }
 
     //Get user from database
@@ -59,13 +61,13 @@ export class AuthController extends Controller {
       user = await userRepository.findOneOrFail({where: {username}});
     } catch (error) {
       this.setStatus(401);
-      return;
+      throw new ErrorResponse(`Username o password incorrecto`, 401);
     }
 
     //Check if encrypted password match
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
       this.setStatus(401);
-      return;
+      throw new ErrorResponse(`Username o password incorrecto`, 401);
     }
 
     //Sing JWT, valid for 1 hour
@@ -74,6 +76,7 @@ export class AuthController extends Controller {
     });
 
     //Send the jwt in the response
+    this.setStatus(200);
     return new TokenAPI(token);
   }
 
@@ -87,8 +90,10 @@ export class AuthController extends Controller {
     //Get ID from JWT
     const id = request.user.userId;
 
-    if (!(data.oldPassword && data.newPassword)) {
+    const {oldPassword, newPassword} = data;
+    if (!(oldPassword && newPassword)) {
       this.setStatus(400);
+      throw new ErrorResponse(`La clave nueva y actual clave son requeridas`, 400);
     }
 
     //Get user from the database
@@ -98,18 +103,20 @@ export class AuthController extends Controller {
       user = await userRepository.findOneOrFail(id);
     } catch (id) {
       this.setStatus(401);
+      throw new ErrorResponse(`Usuario incorrecto`, 401);
     }
 
     //Check if old password matchs
-    if (!user.checkIfUnencryptedPasswordIsValid(data.oldPassword)) {
+    if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
       this.setStatus(401);
-      return;
+      throw new ErrorResponse(`La clave actual es incorrecta`, 401);
     }
 
     //Validate de model (password lenght)
-    user.password = data.newPassword;
+    user.password = newPassword;
     const errors = await validate(user);
     if (errors.length > 0) {
+      // @TODO Retornar errores de validación
       this.setStatus(400);
       return;
     }
