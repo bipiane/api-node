@@ -4,8 +4,9 @@ import {validate} from 'class-validator';
 
 import {Usuario} from '../entity/Usuario';
 import config from '../config/config';
-import {Body, Controller, OperationId, Post, Put, Request, Route, Security, Tags} from 'tsoa';
-import {ErrorResponse} from './v1/utilidades/ErrorResponse';
+import {Body, Controller, OperationId, Post, Put, Request, Response, Route, Security, Tags} from 'tsoa';
+import {ErrorResponse, ErrorValidacion} from './v1/utilidades/ErrorResponse';
+import {UsuarioResponseData} from './v1/utilidades/UsuarioAPI';
 
 /**
  * @example
@@ -57,6 +58,8 @@ export class AuthController extends Controller {
    */
   @Post('login')
   @OperationId('login')
+  @Response<ErrorResponse>('400', 'Username y password son requeridos')
+  @Response<ErrorResponse>('401', 'Username o password incorrecto')
   async login(@Body() data: LoginRequest): Promise<TokenAPI> {
     let {username, password} = data;
     if (!(username && password)) {
@@ -97,7 +100,10 @@ export class AuthController extends Controller {
   @Put('changePassword')
   @Security('access_token')
   @OperationId('changePassword')
-  async changePassword(@Request() request: any, @Body() data: ChangePasswordRequest) {
+  @Response<ErrorResponse>('400', 'La clave nueva y actual clave son requeridas')
+  @Response<ErrorResponse>('401', 'La clave actual es incorrecta')
+  @Response<ErrorResponse>('409', 'Errores de validación')
+  async changePassword(@Request() request: any, @Body() data: ChangePasswordRequest): Promise<UsuarioResponseData> {
     //Get ID from JWT
     const userJWT: TokenPayload = request.user;
 
@@ -127,16 +133,23 @@ export class AuthController extends Controller {
     user.password = newPassword;
     const errors = await validate(user);
     if (errors.length > 0) {
-      // @TODO Retornar errores de validación
-      console.log('errors: ', errors);
-      this.setStatus(400);
-      return;
+      this.setStatus(409);
+      const validationErrors = errors.map(e => {
+        return new ErrorValidacion(e);
+      });
+      throw new ErrorResponse(
+        'Por favor revise la información ingresada.',
+        409,
+        'Errores de validación',
+        validationErrors,
+      );
     }
 
     //Hash the new password and save
     user.hashPassword();
     await userRepository.save(user);
 
-    this.setStatus(204);
+    this.setStatus(200);
+    return new UsuarioResponseData(user);
   }
 }

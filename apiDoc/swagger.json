@@ -12,6 +12,53 @@
       "type": "object",
       "additionalProperties": false
     },
+    "ErrorValidacion": {
+      "properties": {
+        "propertyPath": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["propertyPath", "code", "message"],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "ErrorResponse": {
+      "properties": {
+        "stack": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "result": {
+          "type": "string",
+          "enum": ["error"]
+        },
+        "status": {
+          "type": "number",
+          "format": "double"
+        },
+        "userMessage": {
+          "type": "string"
+        },
+        "developerMessage": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "items": {
+            "$ref": "#/definitions/ErrorValidacion"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["result", "status", "userMessage", "developerMessage", "validationErrors"],
+      "type": "object",
+      "additionalProperties": false
+    },
     "LoginRequest": {
       "properties": {
         "username": {
@@ -29,23 +76,6 @@
         "password": "1234"
       }
     },
-    "ChangePasswordRequest": {
-      "properties": {
-        "oldPassword": {
-          "type": "string"
-        },
-        "newPassword": {
-          "type": "string"
-        }
-      },
-      "required": ["oldPassword", "newPassword"],
-      "type": "object",
-      "additionalProperties": false,
-      "example": {
-        "oldPassword": "asdf",
-        "newPassword": "1234"
-      }
-    },
     "UsuarioAPI": {
       "properties": {
         "id": {
@@ -59,36 +89,6 @@
         }
       },
       "required": ["id", "username", "role"],
-      "type": "object",
-      "additionalProperties": false
-    },
-    "UsuarioResponseLista": {
-      "properties": {
-        "result": {
-          "type": "string",
-          "default": "ok",
-          "x-nullable": true
-        },
-        "status": {
-          "type": "number",
-          "format": "double",
-          "default": 200,
-          "x-nullable": true
-        },
-        "data": {
-          "items": {
-            "$ref": "#/definitions/UsuarioAPI"
-          },
-          "type": "array"
-        },
-        "userMessage": {
-          "type": "string"
-        },
-        "actions": {
-          "type": "string"
-        }
-      },
-      "required": ["data", "userMessage", "actions"],
       "type": "object",
       "additionalProperties": false
     },
@@ -119,34 +119,50 @@
       "type": "object",
       "additionalProperties": false
     },
-    "ErrorResponse": {
+    "ChangePasswordRequest": {
       "properties": {
-        "stack": {
-          "type": "string",
-          "x-nullable": true
+        "oldPassword": {
+          "type": "string"
         },
+        "newPassword": {
+          "type": "string"
+        }
+      },
+      "required": ["oldPassword", "newPassword"],
+      "type": "object",
+      "additionalProperties": false,
+      "example": {
+        "oldPassword": "asdf",
+        "newPassword": "1234"
+      }
+    },
+    "UsuarioResponseLista": {
+      "properties": {
         "result": {
           "type": "string",
-          "enum": ["error"]
+          "default": "ok",
+          "x-nullable": true
         },
         "status": {
           "type": "number",
-          "format": "double"
+          "format": "double",
+          "default": 200,
+          "x-nullable": true
+        },
+        "data": {
+          "items": {
+            "$ref": "#/definitions/UsuarioAPI"
+          },
+          "type": "array"
         },
         "userMessage": {
           "type": "string"
         },
-        "developerMessage": {
+        "actions": {
           "type": "string"
-        },
-        "validationErrors": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
         }
       },
-      "required": ["result", "status", "userMessage", "developerMessage", "validationErrors"],
+      "required": ["data", "userMessage", "actions"],
       "type": "object",
       "additionalProperties": false
     },
@@ -197,6 +213,18 @@
             "schema": {
               "$ref": "#/definitions/TokenAPI"
             }
+          },
+          "400": {
+            "description": "Username y password son requeridos",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Username o password incorrecto",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
           }
         },
         "summary": "Obtención de Token JWT",
@@ -219,8 +247,29 @@
         "operationId": "changePassword",
         "produces": ["application/json"],
         "responses": {
-          "204": {
-            "description": "No content"
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/UsuarioResponseData"
+            }
+          },
+          "400": {
+            "description": "La clave nueva y actual clave son requeridas",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "La clave actual es incorrecta",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Errores de validación",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
           }
         },
         "summary": "Modificar clave",
@@ -271,6 +320,12 @@
             "description": "Usuario creado correctamente",
             "schema": {
               "$ref": "#/definitions/UsuarioResponseData"
+            }
+          },
+          "409": {
+            "description": "Errores de validación",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -332,9 +387,21 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Ok",
+            "description": "Usuario actualizado correctamente",
             "schema": {
               "$ref": "#/definitions/UsuarioResponseData"
+            }
+          },
+          "404": {
+            "description": "No se encontró usuario con ID 123",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Errores de validación",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -367,10 +434,15 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Ok",
+            "description": "Usuario eliminado correctamente",
             "schema": {
-              "type": "string",
-              "enum": ["true"]
+              "$ref": "#/definitions/UsuarioResponseData"
+            }
+          },
+          "404": {
+            "description": "No se encontró usuario con ID 123",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },

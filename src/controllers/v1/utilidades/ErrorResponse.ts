@@ -1,5 +1,35 @@
 import {ValidationError} from 'class-validator';
 
+export class ErrorResponse extends Error {
+  result: 'error';
+  status: number;
+  userMessage: string;
+  developerMessage: string;
+  validationErrors: ErrorValidacion[];
+
+  /**
+   * @param userMessage
+   * @param status
+   * @param developerMessage
+   * @param validationErrors
+   */
+  constructor(
+    userMessage: string,
+    status: number,
+    developerMessage: string = null,
+    validationErrors: ErrorValidacion[] = [],
+  ) {
+    super();
+    // Ocultamos stack trace
+    Error.captureStackTrace(this, this.constructor);
+    this.result = 'error';
+    this.status = status;
+    this.userMessage = userMessage;
+    this.developerMessage = developerMessage;
+    this.validationErrors = validationErrors;
+  }
+}
+
 export class ErrorValidacion {
   propertyPath: string;
   code: string;
@@ -24,32 +54,5 @@ export class ErrorValidacion {
     if (keys.length > 0) {
       this.message = validation.constraints[keys[0]];
     }
-  }
-}
-
-export class ErrorResponse {
-  result: 'error';
-  status: number;
-  userMessage: string;
-  developerMessage: string;
-  validationErrors: ErrorValidacion[];
-
-  /**
-   * @param userMessage
-   * @param status
-   * @param developerMessage
-   * @param validationErrors
-   */
-  constructor(
-    userMessage: string,
-    status: number,
-    developerMessage: string = null,
-    validationErrors: ErrorValidacion[] = [],
-  ) {
-    this.result = 'error';
-    this.status = status;
-    this.userMessage = userMessage;
-    this.developerMessage = developerMessage;
-    this.validationErrors = validationErrors;
   }
 }

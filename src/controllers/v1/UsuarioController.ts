@@ -22,7 +22,7 @@ import {
   UsuarioResponseData,
   UsuarioResponseLista,
 } from './utilidades/UsuarioAPI';
-import {ErrorResponse} from './utilidades/ErrorResponse';
+import {ErrorResponse, ErrorValidacion} from './utilidades/ErrorResponse';
 
 @Tags('Usuario')
 @Route('api/v1/usuarios')
@@ -46,8 +46,8 @@ export class UsuarioController extends Controller {
    */
   @Get('{id}')
   @Security('access_token', ['SUPER_ADMIN'])
-  @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
   @OperationId('findUsuario')
+  @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
   async show(id: string): Promise<UsuarioResponseData> {
     const userRepository = getRepository(Usuario);
     const usuario = await userRepository.findOne(id);
@@ -68,6 +68,7 @@ export class UsuarioController extends Controller {
   @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('saveUsuario')
   @SuccessResponse('201', 'Usuario creado correctamente')
+  @Response<ErrorResponse>('409', 'Errores de validación')
   async save(@Body() data: UsuarioCreationRequest): Promise<UsuarioResponseData> {
     let {username, password, role} = data;
     let user = new Usuario();
@@ -78,22 +79,26 @@ export class UsuarioController extends Controller {
     //Validade if the parameters are ok
     const errors = await validate(user);
     if (errors.length > 0) {
-      // res.status(400).send(errors);
-      this.setStatus(400);
-      return;
+      this.setStatus(409);
+      const validationErrors = errors.map(e => {
+        return new ErrorValidacion(e);
+      });
+      throw new ErrorResponse(
+        'Por favor revise la información ingresada.',
+        409,
+        'Errores de validación',
+        validationErrors,
+      );
     }
 
-    //Hash the password, to securely store on DB
     user.hashPassword();
 
-    //Try to save. If fails, the username is already in use
     const userRepository = getRepository(Usuario);
     try {
       await userRepository.save(user);
     } catch (e) {
-      // res.status(409).send('username already in use');
       this.setStatus(409);
-      return;
+      throw new ErrorResponse('Excepción al guardar usuario.', 409, e.message);
     }
 
     this.setStatus(201);
@@ -108,44 +113,45 @@ export class UsuarioController extends Controller {
   @Put('{id}')
   @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('updateUsuario')
+  @SuccessResponse('200', 'Usuario actualizado correctamente')
+  @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
+  @Response<ErrorResponse>('409', 'Errores de validación')
   async update(id: string, @Body() data: UsuarioUpdateRequest): Promise<UsuarioResponseData> {
     const {username, role} = data;
 
-    //Try to find user on database
     const userRepository = getRepository(Usuario);
     let user: Usuario;
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
-      console.log('Usuario no encontrado: ', error);
-      //If not found, send a 404 response
-      // res.status(404).send('User not found');
       this.setStatus(404);
-      return;
+      throw new ErrorResponse(`No se encontró usuario con ID ${id}`, 404);
     }
 
-    //Validate the new values on model
     user.username = username ? username : user.username;
     user.role = role ? role : user.role;
     const errors = await validate(user);
     if (errors.length > 0) {
-      console.log('Error validación: ', errors);
-      // res.status(400).send(errors);
-      this.setStatus(400);
-      return;
+      this.setStatus(409);
+      const validationErrors = errors.map(e => {
+        return new ErrorValidacion(e);
+      });
+      throw new ErrorResponse(
+        'Por favor revise la información ingresada.',
+        409,
+        'Errores de validación',
+        validationErrors,
+      );
     }
 
-    //Try to safe, if fails, that means username already in use
     try {
       user = await userRepository.save(user);
     } catch (e) {
-      console.log('Excepción al guardar: ', e);
-      // res.status(409).send('username already in use');
       this.setStatus(409);
-      return;
+      throw new ErrorResponse('Excepción al guardar usuario.', 409, e.message);
     }
-    //After all send a 204 (no content, but accepted) response
-    // res.status(204).send();
+
+    this.setStatus(200);
     return new UsuarioResponseData(user, 200, 'Usuario actualizado correctamente');
   }
 
@@ -156,20 +162,20 @@ export class UsuarioController extends Controller {
   @Delete('{id}')
   @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('deleteUsuario')
-  async delete(id: string): Promise<true> {
+  @SuccessResponse('200', 'Usuario eliminado correctamente')
+  @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
+  async delete(id: string): Promise<UsuarioResponseData> {
     const userRepository = getRepository(Usuario);
+    let user: Usuario;
     try {
-      await userRepository.findOneOrFail(id);
+      user = await userRepository.findOneOrFail(id);
     } catch (error) {
-      // res.status(404).send('User not found');
       this.setStatus(404);
-      return;
+      throw new ErrorResponse(`No se encontró usuario con ID ${id}`, 404);
     }
     await userRepository.delete(id);
 
-    //After all send a 204 (no content, but accepted) response
-    // res.status(204).send();
-    this.setStatus(204);
-    return true;
+    this.setStatus(200);
+    return new UsuarioResponseData(user, 200, 'Usuario eliminado correctamente');
   }
 }

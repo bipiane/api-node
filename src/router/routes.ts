@@ -20,20 +20,34 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ErrorValidacion: {
+    dataType: 'refObject',
+    properties: {
+      propertyPath: {dataType: 'string', required: true},
+      code: {dataType: 'string', required: true},
+      message: {dataType: 'string', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  ErrorResponse: {
+    dataType: 'refObject',
+    properties: {
+      stack: {dataType: 'string'},
+      result: {dataType: 'enum', enums: ['error'], required: true},
+      status: {dataType: 'double', required: true},
+      userMessage: {dataType: 'string', required: true},
+      developerMessage: {dataType: 'string', required: true},
+      validationErrors: {dataType: 'array', array: {ref: 'ErrorValidacion'}, required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   LoginRequest: {
     dataType: 'refObject',
     properties: {
       username: {dataType: 'string', required: true},
       password: {dataType: 'string', required: true},
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  ChangePasswordRequest: {
-    dataType: 'refObject',
-    properties: {
-      oldPassword: {dataType: 'string', required: true},
-      newPassword: {dataType: 'string', required: true},
     },
     additionalProperties: false,
   },
@@ -44,18 +58,6 @@ const models: TsoaRoute.Models = {
       id: {dataType: 'string', required: true},
       username: {dataType: 'string', required: true},
       role: {dataType: 'string', required: true},
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  UsuarioResponseLista: {
-    dataType: 'refObject',
-    properties: {
-      result: {dataType: 'string', default: 'ok'},
-      status: {dataType: 'double', default: 200},
-      data: {dataType: 'array', array: {ref: 'UsuarioAPI'}, required: true},
-      userMessage: {dataType: 'string', required: true},
-      actions: {dataType: 'string', required: true},
     },
     additionalProperties: false,
   },
@@ -72,15 +74,23 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  ErrorResponse: {
+  ChangePasswordRequest: {
     dataType: 'refObject',
     properties: {
-      stack: {dataType: 'string'},
-      result: {dataType: 'enum', enums: ['error'], required: true},
-      status: {dataType: 'double', required: true},
+      oldPassword: {dataType: 'string', required: true},
+      newPassword: {dataType: 'string', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  UsuarioResponseLista: {
+    dataType: 'refObject',
+    properties: {
+      result: {dataType: 'string', default: 'ok'},
+      status: {dataType: 'double', default: 200},
+      data: {dataType: 'array', array: {ref: 'UsuarioAPI'}, required: true},
       userMessage: {dataType: 'string', required: true},
-      developerMessage: {dataType: 'string', required: true},
-      validationErrors: {dataType: 'array', array: {dataType: 'string'}, required: true},
+      actions: {dataType: 'string', required: true},
     },
     additionalProperties: false,
   },

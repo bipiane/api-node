@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import chalk from 'chalk';
 import {createConnection} from 'typeorm';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
@@ -38,7 +39,7 @@ createConnection()
     }
 
     app.listen(port, () => {
-      console.log(`🚀 Server started: http://localhost:${port}/doc`);
+      console.log(chalk.green(`🚀 Server started: http://localhost:${port}/doc`));
     });
   })
   .catch(error => {
