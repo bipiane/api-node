@@ -6,8 +6,8 @@ import * as bodyParser from 'body-parser';
 import * as helmet from 'helmet';
 import * as cors from 'cors';
 import {RegisterRoutes} from './router/routes';
+import {ErrorResponse} from './controllers/v1/utilidades/ErrorResponse';
 const swaggerUi = require('swagger-ui-express');
-import * as errorHandler from 'api-error-handler';
 
 // Obtenemos variables de .env
 const port = process.env.APP_PORT || 3000;
@@ -26,8 +26,22 @@ createConnection()
     // Cargamos todas las rutas generadas por TSOA
     RegisterRoutes(app);
 
-    // Tratamos los errores de API
-    app.use(errorHandler());
+    // Interceptamos y formateamos los errores y excepciones
+    app.use((err, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const status = err.status || 500;
+
+      let body = err;
+      // Si el error no es del tipo ErrorResponse lo formateamos
+      if (!(err instanceof ErrorResponse) && (!err.result || !err.userMessage)) {
+        if (status === 500) {
+          body = new ErrorResponse('Se ha producido un error al procesar la solicitud.', status, err.message);
+        } else {
+          body = new ErrorResponse(err.message, status);
+        }
+      }
+      res.status(status).json(body);
+      next();
+    });
 
     // Cargamos la documentación Swagger generada
     try {

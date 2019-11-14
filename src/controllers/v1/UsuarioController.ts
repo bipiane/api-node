@@ -53,7 +53,6 @@ export class UsuarioController extends Controller {
     const usuario = await userRepository.findOne(id);
 
     if (!usuario) {
-      this.setStatus(404);
       throw new ErrorResponse(`No se encontró usuario con ID ${id}`, 404);
     }
 
@@ -79,7 +78,6 @@ export class UsuarioController extends Controller {
     //Validade if the parameters are ok
     const errors = await validate(user);
     if (errors.length > 0) {
-      this.setStatus(409);
       const validationErrors = errors.map(e => {
         return new ErrorValidacion(e);
       });
@@ -97,7 +95,6 @@ export class UsuarioController extends Controller {
     try {
       await userRepository.save(user);
     } catch (e) {
-      this.setStatus(409);
       throw new ErrorResponse('Excepción al guardar usuario.', 409, e.message);
     }
 
@@ -124,7 +121,6 @@ export class UsuarioController extends Controller {
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
-      this.setStatus(404);
       throw new ErrorResponse(`No se encontró usuario con ID ${id}`, 404);
     }
 
@@ -132,7 +128,6 @@ export class UsuarioController extends Controller {
     user.role = role ? role : user.role;
     const errors = await validate(user);
     if (errors.length > 0) {
-      this.setStatus(409);
       const validationErrors = errors.map(e => {
         return new ErrorValidacion(e);
       });
@@ -147,7 +142,6 @@ export class UsuarioController extends Controller {
     try {
       user = await userRepository.save(user);
     } catch (e) {
-      this.setStatus(409);
       throw new ErrorResponse('Excepción al guardar usuario.', 409, e.message);
     }
 
@@ -170,7 +164,6 @@ export class UsuarioController extends Controller {
     try {
       user = await userRepository.findOneOrFail(id);
     } catch (error) {
-      this.setStatus(404);
       throw new ErrorResponse(`No se encontró usuario con ID ${id}`, 404);
     }
     await userRepository.delete(id);

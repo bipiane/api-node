@@ -63,7 +63,6 @@ export class AuthController extends Controller {
   async login(@Body() data: LoginRequest): Promise<TokenAPI> {
     let {username, password} = data;
     if (!(username && password)) {
-      this.setStatus(400);
       throw new ErrorResponse(`Username y password son requeridos`, 400);
     }
 
@@ -73,13 +72,11 @@ export class AuthController extends Controller {
     try {
       user = await userRepository.findOneOrFail({where: {username}});
     } catch (error) {
-      this.setStatus(401);
       throw new ErrorResponse(`Username o password incorrecto`, 401);
     }
 
     //Check if encrypted password match
     if (!user.checkIfUnencryptedPasswordIsValid(password)) {
-      this.setStatus(401);
       throw new ErrorResponse(`Username o password incorrecto`, 401);
     }
 
@@ -109,7 +106,6 @@ export class AuthController extends Controller {
 
     const {oldPassword, newPassword} = data;
     if (!(oldPassword && newPassword)) {
-      this.setStatus(400);
       throw new ErrorResponse(`La clave nueva y actual clave son requeridas`, 400);
     }
 
@@ -119,13 +115,11 @@ export class AuthController extends Controller {
     try {
       user = await userRepository.findOneOrFail(userJWT.userId);
     } catch (id) {
-      this.setStatus(401);
       throw new ErrorResponse(`Usuario incorrecto`, 401);
     }
 
     //Check if old password matchs
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
-      this.setStatus(401);
       throw new ErrorResponse(`La clave actual es incorrecta`, 401);
     }
 
@@ -133,7 +127,6 @@ export class AuthController extends Controller {
     user.password = newPassword;
     const errors = await validate(user);
     if (errors.length > 0) {
-      this.setStatus(409);
       const validationErrors = errors.map(e => {
         return new ErrorValidacion(e);
       });
