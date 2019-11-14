@@ -1,5 +1,5 @@
 import {Entity, Column, Unique, CreateDateColumn, UpdateDateColumn, ObjectIdColumn} from 'typeorm';
-import {Length, IsNotEmpty} from 'class-validator';
+import {IsNotEmpty, MinLength, MaxLength} from 'class-validator';
 import * as bcrypt from 'bcryptjs';
 
 @Entity()
@@ -9,15 +9,32 @@ export class Usuario {
   id: string;
 
   @Column()
-  @Length(4, 20)
+  @MinLength(4, {
+    message: 'Username muy corto. El tamaño mínimo de username es $constraint1 caracteres.',
+    context: {code: 'usuario.minlength.username'},
+  })
+  @MaxLength(20, {
+    message: 'Username muy largo. El tamaño máximo de username es $constraint1 caracteres.',
+    context: {code: 'usuario.maxlength.username'},
+  })
   username: string;
 
   @Column()
-  @Length(4, 100)
+  @MinLength(4, {
+    message: 'Password muy corta. El tamaño mínimo de password es $constraint1 caracteres.',
+    context: {code: 'usuario.minlength.password'},
+  })
+  @MaxLength(100, {
+    message: 'Password muy larga. El tamaño máximo de password es $constraint1 caracteres.',
+    context: {code: 'usuario.maxlength.password'},
+  })
   password: string;
 
   @Column()
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'El rol del usuario es obligatorio.',
+    context: {code: 'usuario.isnotempty.role'},
+  })
   role: string;
 
   @Column()
