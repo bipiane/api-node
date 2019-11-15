@@ -5,3 +5,5 @@ export APP_PORT=3000
 export DB_HOST=localhost
 export DB_PORT=27017
 export DB_NAME=test_node
+export DB_USER=user_api
+export DB_PASSWORD=1234
