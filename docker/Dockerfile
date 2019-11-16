@@ -8,6 +8,6 @@ COPY . .
 
 RUN npm install
 
-EXPOSE 3000
+EXPOSE $APP_PORT
 
 CMD ["npm", "run", "prod"]

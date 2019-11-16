@@ -5,6 +5,7 @@ services:
       context: ../
       dockerfile: docker/Dockerfile
     environment:
+      APP_PORT: $APP_PORT
       JWT_SECRET: $JWT_SECRET
       DB_HOST: $DB_HOST
       DB_PORT: $DB_PORT
@@ -13,4 +14,4 @@ services:
       DB_PASSWORD: $DB_PASSWORD
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - $APP_PORT:$APP_PORT
