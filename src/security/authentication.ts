@@ -1,6 +1,5 @@
 import * as express from 'express';
 import * as jwt from 'jsonwebtoken';
-import config from '../config/config';
 import {getRepository} from 'typeorm';
 import {Usuario} from '../entity/Usuario';
 
@@ -12,7 +11,7 @@ export function expressAuthentication(request: express.Request, securityName: st
       if (!token) {
         reject(new Error('Solicitud sin token'));
       }
-      jwt.verify(token, config.jwtSecret, async function(err: any, decoded: any) {
+      jwt.verify(token, process.env.JWT_SECRET, async function(err: any, decoded: any) {
         if (err) {
           reject(err);
         } else {

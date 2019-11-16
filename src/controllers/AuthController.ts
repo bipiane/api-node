@@ -3,7 +3,6 @@ import {getRepository} from 'typeorm';
 import {validate} from 'class-validator';
 
 import {Usuario} from '../entity/Usuario';
-import config from '../config/config';
 import {Body, Controller, OperationId, Post, Put, Request, Response, Route, Security, Tags} from 'tsoa';
 import {ErrorResponse, ErrorValidacion} from './v1/utilidades/ErrorResponse';
 import {UsuarioResponseData} from './v1/utilidades/UsuarioAPI';
@@ -82,7 +81,7 @@ export class AuthController extends Controller {
 
     //Sing JWT, valid for 1 hour
     const payload = new TokenPayload(user);
-    const token = jwt.sign(Object.assign({}, payload), config.jwtSecret, {
+    const token = jwt.sign(Object.assign({}, payload), process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
 

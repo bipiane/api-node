@@ -40,6 +40,14 @@ Ejecutar luego de editar controladores y entidades
 # Creará las rutas de api y su swagger.json,
 # según la configuración tsoa.json
 npm run tsoa:gen
+```
+
+## Deploy con Docker
+```  
+# Crear y levantar contenedor
+docker-compose -f docker/docker-compose.yml up -d --build
+# Apagar contenedor
+docker-compose -f docker/docker-compose.yml stop
 ``` 
 
 ## Contributing

@@ -1,6 +1,9 @@
 # App
 export APP_PORT=3000
 
+# JWT
+export JWT_SECRET=CambiarSecret!!!
+
 # MongoDB
 export DB_HOST=localhost
 export DB_PORT=27017

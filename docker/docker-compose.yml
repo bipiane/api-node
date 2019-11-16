@@ -5,6 +5,7 @@ services:
       context: ../
       dockerfile: docker/Dockerfile
     environment:
+      JWT_SECRET: $JWT_SECRET
       DB_HOST: $DB_HOST
       DB_PORT: $DB_PORT
       DB_NAME: $DB_NAME
