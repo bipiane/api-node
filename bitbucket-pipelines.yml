@@ -19,10 +19,10 @@ pipelines:
         name: create artifact
         script:
           - mkdir artefacts
-          - tar -czf artefacts/my-app-$BITBUCKET_BUILD_NUMBER.tar.gz --exclude=./artefacts .
+          - tar -czf artefacts/$HEROKU_APP_NAME-$BITBUCKET_BUILD_NUMBER.tar.gz --exclude=./artefacts .
           - cp artefacts/* .
         artifacts:
-          - my-app-*.tar.gz
+          - $HEROKU_APP_NAME-*.tar.gz
     - step:
         name: Deploy to production
         deployment: production
@@ -30,7 +30,7 @@ pipelines:
           - pipe: atlassian/heroku-deploy:1.0.1
             variables:
               HEROKU_API_KEY: $HEROKU_API_KEY
-              HEROKU_APP_NAME: 'API Node JS'
-              ZIP_FILE: 'my-app-$BITBUCKET_BUILD_NUMBER.tar.gz'
+              HEROKU_APP_NAME: $HEROKU_APP_NAME
+              ZIP_FILE: '$HEROKU_APP_NAME-$BITBUCKET_BUILD_NUMBER.tar.gz'
               WAIT: 'true' # Optional.
-              DEBUG: 'false' # Optional
+              DEBUG: 'true' # Optional
