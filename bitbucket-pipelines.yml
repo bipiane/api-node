@@ -8,7 +8,7 @@ image: node:10.15.3
 pipelines:
   default:
     - step:
-        name: Defaults
+        name: Install & Build
         caches:
           - node
         script: # Modify the commands below to build your repository.
@@ -16,13 +16,13 @@ pipelines:
           - npm run build
           - npm test
     - step:
-        name: create artifact
+        name: Create artifact
         script:
           - mkdir artefacts
-          - tar -czf artefacts/$HEROKU_APP_NAME-$BITBUCKET_BUILD_NUMBER.tar.gz --exclude=./artefacts .
+          - tar -czf artefacts/my-app-$BITBUCKET_BUILD_NUMBER.tar.gz --exclude=./artefacts .
           - cp artefacts/* .
         artifacts:
-          - $HEROKU_APP_NAME-*.tar.gz
+          - my-app-*.tar.gz
     - step:
         name: Deploy to production
         deployment: production
@@ -31,6 +31,6 @@ pipelines:
             variables:
               HEROKU_API_KEY: $HEROKU_API_KEY
               HEROKU_APP_NAME: $HEROKU_APP_NAME
-              ZIP_FILE: '$HEROKU_APP_NAME-$BITBUCKET_BUILD_NUMBER.tar.gz'
+              ZIP_FILE: 'my-app-$BITBUCKET_BUILD_NUMBER.tar.gz'
               WAIT: 'true' # Optional.
               DEBUG: 'true' # Optional
