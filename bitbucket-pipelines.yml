@@ -8,13 +8,29 @@ image: node:10.15.3
 pipelines:
   default:
     - step:
+        name: Defaults
         caches:
           - node
         script: # Modify the commands below to build your repository.
           - npm install
+          - npm run build
           - npm test
-          - pipe: atlassian/heroku-deploy:1.1.0
-                variables:
-                    HEROKU_API_KEY: $HEROKU_API_KEY
-                    HEROKU_APP_NAME: 'API Node JS'
-                    ZIP_FILE: 'api-node-ipianetti-src.tar.gz'
+    - step:
+        name: create artifact
+        script:
+          - mkdir artefacts
+          - tar -czf artefacts/my-app-$BITBUCKET_BUILD_NUMBER.tar.gz --exclude=./artefacts .
+          - cp artefacts/* .
+        artifacts:
+          - my-app-*.tar.gz
+    - step:
+        name: Deploy to production
+        deployment: production
+        script:
+          - pipe: atlassian/heroku-deploy:1.0.1
+            variables:
+              HEROKU_API_KEY: $HEROKU_API_KEY
+              HEROKU_APP_NAME: 'API Node JS'
+              ZIP_FILE: 'my-app-$BITBUCKET_BUILD_NUMBER.tar.gz'
+              WAIT: 'true' # Optional.
+              DEBUG: 'false' # Optional
