@@ -15,3 +15,5 @@ services:
     restart: unless-stopped
     ports:
       - $APP_PORT:$APP_PORT
+    volumes:
+      - ../.:/usr/src/app
