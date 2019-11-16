@@ -1,0 +1,9 @@
+version: '3'
+services:
+  api-node-js:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
