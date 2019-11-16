@@ -1,3 +1,5 @@
+// Cargamos tanto las variables del archivo `.envrc` para desarrollo local
+// como las variables de `docker-compose.yml` para docker
 const {DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD} = process.env;
 
 if (!DB_HOST || !DB_PORT || !DB_NAME || !DB_USER || !DB_PASSWORD) {
