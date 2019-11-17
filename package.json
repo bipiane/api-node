@@ -1,10 +1,10 @@
 {
-  "name": "jwt-express-typeorm",
+  "name": "api-node",
   "version": "0.0.1",
-  "description": "Awesome project developed with TypeORM.",
+  "description": "Node REST APIs",
   "engines": {
-    "node": "12.6.0",
-    "npm": "6.9.0"
+    "node": "12.13.0",
+    "npm": "6.12.0"
   },
   "scripts": {
     "dev": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/app.ts",

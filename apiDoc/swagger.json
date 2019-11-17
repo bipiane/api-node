@@ -198,9 +198,9 @@
     }
   },
   "info": {
-    "title": "jwt-express-typeorm",
+    "title": "api-node",
     "version": "0.0.1",
-    "description": "Awesome project developed with TypeORM."
+    "description": "Node REST APIs"
   },
   "paths": {
     "/login": {
