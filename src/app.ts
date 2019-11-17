@@ -52,7 +52,7 @@ createConnection()
       console.error('Error al cargar documentación Swagger: ', error);
     }
 
-    app.listen(port, () => {
+    app.listen(Number(port), '0.0.0.0', () => {
       console.log(chalk.green(`🚀 Server started: http://localhost:${port}/doc`));
     });
   })
