@@ -2,6 +2,10 @@
   "name": "jwt-express-typeorm",
   "version": "0.0.1",
   "description": "Awesome project developed with TypeORM.",
+  "engines": {
+    "node": "12.6.0",
+    "npm": "6.9.0"
+  },
   "scripts": {
     "dev": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/app.ts",
     "tsoa:gen": "tsoa routes && tsoa swagger && npm run prettier",
