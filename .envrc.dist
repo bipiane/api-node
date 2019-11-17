@@ -1,5 +1,5 @@
 # App
-export APP_PORT=3000
+export PORT=3000
 
 # JWT
 export JWT_SECRET=CambiarSecret!!!

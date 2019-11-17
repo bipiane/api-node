@@ -10,7 +10,7 @@ import {ErrorResponse} from './controllers/v1/utilidades/ErrorResponse';
 const swaggerUi = require('swagger-ui-express');
 
 // Obtenemos variables de .env
-const port = process.env.APP_PORT || 3000;
+const port = process.env.PORT || 3000;
 
 // Creamos conexión y luego iniciamos express
 createConnection()
