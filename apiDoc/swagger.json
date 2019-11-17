@@ -331,11 +331,7 @@
         },
         "summary": "Permite crear un usuario",
         "tags": ["Usuario"],
-        "security": [
-          {
-            "access_token": ["SUPER_ADMIN"]
-          }
-        ],
+        "security": [],
         "parameters": [
           {
             "in": "body",
@@ -368,11 +364,7 @@
         },
         "summary": "Obtiene un usuario por ID",
         "tags": ["Usuario"],
-        "security": [
-          {
-            "access_token": ["SUPER_ADMIN"]
-          }
-        ],
+        "security": [],
         "parameters": [
           {
             "in": "path",
