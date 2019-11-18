@@ -136,7 +136,42 @@
         "newPassword": "1234"
       }
     },
-    "UsuarioResponseLista": {
+    "MetadataResponse": {
+      "properties": {
+        "offset": {
+          "type": "number",
+          "format": "double"
+        },
+        "limit": {
+          "type": "number",
+          "format": "double"
+        },
+        "count": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": ["offset", "limit", "count"],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "UsuarioAPIPaginacion": {
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/MetadataResponse"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/definitions/UsuarioAPI"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["metadata", "results"],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "UsuarioResponsePaginacion": {
       "properties": {
         "result": {
           "type": "string",
@@ -150,10 +185,7 @@
           "x-nullable": true
         },
         "data": {
-          "items": {
-            "$ref": "#/definitions/UsuarioAPI"
-          },
-          "type": "array"
+          "$ref": "#/definitions/UsuarioAPIPaginacion"
         },
         "userMessage": {
           "type": "string"
@@ -299,7 +331,7 @@
           "200": {
             "description": "Ok",
             "schema": {
-              "$ref": "#/definitions/UsuarioResponseLista"
+              "$ref": "#/definitions/UsuarioResponsePaginacion"
             }
           }
         },
@@ -310,7 +342,22 @@
             "access_token": ["SUPER_ADMIN"]
           }
         ],
-        "parameters": []
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "format": "double",
+            "type": "number"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "format": "double",
+            "type": "number"
+          }
+        ]
       },
       "post": {
         "operationId": "saveUsuario",

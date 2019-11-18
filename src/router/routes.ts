@@ -83,12 +83,31 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  UsuarioResponseLista: {
+  MetadataResponse: {
+    dataType: 'refObject',
+    properties: {
+      offset: {dataType: 'double', required: true},
+      limit: {dataType: 'double', required: true},
+      count: {dataType: 'double', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  UsuarioAPIPaginacion: {
+    dataType: 'refObject',
+    properties: {
+      metadata: {ref: 'MetadataResponse', required: true},
+      results: {dataType: 'array', array: {ref: 'UsuarioAPI'}, required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  UsuarioResponsePaginacion: {
     dataType: 'refObject',
     properties: {
       result: {dataType: 'string', default: 'ok'},
       status: {dataType: 'double', default: 200},
-      data: {dataType: 'array', array: {ref: 'UsuarioAPI'}, required: true},
+      data: {ref: 'UsuarioAPIPaginacion', required: true},
       userMessage: {dataType: 'string', required: true},
       actions: {dataType: 'string', required: true},
     },
@@ -174,7 +193,10 @@ export function RegisterRoutes(app: express.Express) {
     response: any,
     next: any,
   ) {
-    const args = {};
+    const args = {
+      limit: {in: 'query', name: 'limit', dataType: 'double'},
+      offset: {in: 'query', name: 'offset', dataType: 'double'},
+    };
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 

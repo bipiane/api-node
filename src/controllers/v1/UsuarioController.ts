@@ -6,6 +6,7 @@ import {
   OperationId,
   Post,
   Put,
+  Query,
   Response,
   Route,
   Security,
@@ -20,7 +21,7 @@ import {
   UsuarioCreationRequest,
   UsuarioUpdateRequest,
   UsuarioResponseData,
-  UsuarioResponseLista,
+  UsuarioResponsePaginacion,
 } from './utilidades/UsuarioAPI';
 import {ErrorResponse, ErrorValidacion} from './utilidades/ErrorResponse';
 
@@ -33,11 +34,17 @@ export class UsuarioController extends Controller {
   @Get()
   @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('findAllUsuarios')
-  async index(): Promise<UsuarioResponseLista> {
+  async index(@Query() limit?: number, @Query() offset?: number): Promise<UsuarioResponsePaginacion> {
     const userRepository = getRepository(Usuario);
-    const lista = await userRepository.find();
+    limit = limit || 100;
+    offset = offset || 0;
 
-    return new UsuarioResponseLista(lista);
+    const [result, total] = await userRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+
+    return new UsuarioResponsePaginacion(result, offset, limit, total);
   }
 
   /**
