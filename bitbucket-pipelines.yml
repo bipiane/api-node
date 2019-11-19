@@ -15,22 +15,32 @@ pipelines:
           - npm install
           - npm run build
           - npm test
-    - step:
-        name: Create artifact
-        script:
-          - mkdir artefacts
-          - tar -czf artefacts/my-app-$BITBUCKET_BUILD_NUMBER.tar.gz --exclude=./artefacts .
-          - cp artefacts/* .
-        artifacts:
-          - my-app-*.tar.gz
-    - step:
-        name: Deploy to production
-        deployment: production
-        script:
-          - pipe: atlassian/heroku-deploy:1.0.1
-            variables:
-              HEROKU_API_KEY: $HEROKU_API_KEY
-              HEROKU_APP_NAME: $HEROKU_APP_NAME
-              ZIP_FILE: 'my-app-$BITBUCKET_BUILD_NUMBER.tar.gz'
-              WAIT: 'true' # Optional.
-              DEBUG: 'true' # Optional
+  branches:
+    master:
+      - step:
+          name: Install & Build
+          caches:
+            - node
+          script: # Modify the commands below to build your repository.
+            - npm install
+            - npm run build
+            - npm test
+      - step:
+          name: Create artifact
+          script:
+            - mkdir artefacts
+            - tar -czf artefacts/my-app-$BITBUCKET_BUILD_NUMBER.tar.gz --exclude=./artefacts .
+            - cp artefacts/* .
+          artifacts:
+            - my-app-*.tar.gz
+      - step:
+          name: Deploy to production
+          deployment: production
+          script:
+            - pipe: atlassian/heroku-deploy:1.0.1
+              variables:
+                HEROKU_API_KEY: $HEROKU_API_KEY
+                HEROKU_APP_NAME: $HEROKU_APP_NAME
+                ZIP_FILE: 'my-app-$BITBUCKET_BUILD_NUMBER.tar.gz'
+                WAIT: 'true' # Optional.
+                DEBUG: 'true' # Optional
