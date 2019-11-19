@@ -45,11 +45,12 @@ export class Usuario {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  hashPassword() {
+  hashPassword(): string {
     this.password = bcrypt.hashSync(this.password, 8);
+    return this.password;
   }
 
-  checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
+  checkIfUnencryptedPasswordIsValid(unencryptedPassword: string): boolean {
     return bcrypt.compareSync(unencryptedPassword, this.password);
   }
 }

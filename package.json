@@ -13,7 +13,9 @@
     "build": "npm run tsoa:gen && tsc && npm run copy",
     "start": "ts-node ./build/src/app.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "prettier": "prettier --config ./.prettierrc --write \"src/**/*{.ts,.js,.json,.css,.scss,.html}\" \"*.json\" \"apiDoc/*.json\" "
+    "prettier": "prettier --config ./.prettierrc --write \"src/**/*{.ts,.js,.json,.css,.scss,.html}\" \"*.json\" \"apiDoc/*.json\" ",
+    "test": "mocha",
+    "coverage": "nyc mocha"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -29,6 +31,7 @@
     "express": "^4.17.1",
     "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^6.2.2",
     "mongodb": "^3.3.3",
     "mysql": "^2.17.1",
     "prettier": "^1.18.2",
@@ -41,6 +44,25 @@
     "typescript": "^3.5.3"
   },
   "devDependencies": {
-    "@types/node": "^8.10.58"
+    "@istanbuljs/nyc-config-typescript": "^0.1.3",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^8.10.58",
+    "chai": "^4.2.0",
+    "jsdom": "^15.2.1",
+    "nyc": "^14.1.1",
+    "source-map-support": "^0.5.16"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true,
+    "include": "**/src/**/*",
+    "exclude": [
+      "**/router/**",
+      "**/migration/**"
+    ],
+    "reporter": [
+      "text",
+      "lcov"
+    ]
   }
 }

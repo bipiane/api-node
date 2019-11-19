@@ -5,7 +5,7 @@ export class DataOk {
   userMessage: string;
   actions: string;
 
-  constructor(status: number, userMessage: string, actions: string) {
+  constructor(status: number, userMessage: string = null, actions: string = null) {
     this.status = status;
     this.userMessage = userMessage;
     this.actions = actions;
