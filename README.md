@@ -56,6 +56,12 @@ Ejecutar luego de editar controladores y entidades
 npm run tsoa:gen
 ```
 
+## Testing
+```
+npm run test
+npm run coverage
+```
+
 ## Servidor local
 
 ```
