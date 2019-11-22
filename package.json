@@ -58,7 +58,8 @@
     "include": "**/src/**/*",
     "exclude": [
       "**/router/**",
-      "**/migration/**"
+      "**/migration/**",
+      "tests/**"
     ],
     "reporter": [
       "text",

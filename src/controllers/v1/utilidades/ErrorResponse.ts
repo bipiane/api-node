@@ -50,7 +50,7 @@ export class ErrorValidacion {
     }
 
     // Obtenemos el mensaje de validación
-    const keys = Object.keys(validation.constraints);
+    const keys = Object.keys(validation.constraints ? validation.constraints : []);
     if (keys.length > 0) {
       this.message = validation.constraints[keys[0]];
     }

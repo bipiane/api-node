@@ -59,7 +59,9 @@ npm run tsoa:gen
 ## Testing
 ```
 npm run test
-npm run coverage
+npm run coverage 
+# Ver reporte coverage en:
+open coverage/lcov-report/index.html
 ```
 
 ## Servidor local
