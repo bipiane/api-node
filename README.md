@@ -37,7 +37,7 @@ direnv allow
 Ejecutar aplicación y sincronizar base de datos
 
 ```
-npm run start
+npm run dev
 ```
 
 Ejecutar migración para crear usuarios iniciales
