@@ -1,4 +1,6 @@
-# Node REST APIs
+# Node REST API
+
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 https://api-node-ipianetti.herokuapp.com/doc
 
@@ -28,10 +30,8 @@ npm install
 Crear variables de entorno para conexión con MongoDB
 
 ```
-# Environment: Copiar .envrc.dist y editar .envrc
-cp .envrc.dist .envrc
-# Aplicar cambios en .envrc
-direnv allow
+# Environment
+cp .env.dist .env
 ```
 
 Ejecutar aplicación y sincronizar base de datos

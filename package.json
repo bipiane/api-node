@@ -1,7 +1,11 @@
 {
   "name": "api-node",
   "version": "0.0.1",
-  "description": "Node REST APIs Test",
+  "description": "Node REST API",
+  "author": {
+    "name": "Ivan Pianetti",
+    "email": "ivanpianetti23@gmail.com"
+  },
   "engines": {
     "node": "12.13.0",
     "npm": "6.12.0"

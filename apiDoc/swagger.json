@@ -232,7 +232,7 @@
   "info": {
     "title": "api-node",
     "version": "0.0.1",
-    "description": "Node REST APIs Test"
+    "description": "Node REST API"
   },
   "paths": {
     "/login": {
