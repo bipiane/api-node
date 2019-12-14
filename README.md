@@ -38,7 +38,9 @@ Ejecutar aplicación y sincronizar base de datos
 
 ```
 npm run dev
-```
+```    
+Swagger UI
+![Example Delete](docs/swagger_ui.jpg)
 
 Ejecutar migración para crear usuarios iniciales
 
