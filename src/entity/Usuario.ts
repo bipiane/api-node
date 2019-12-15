@@ -2,6 +2,7 @@ import {Entity, Column, Unique, CreateDateColumn, UpdateDateColumn, ObjectIdColu
 import {IsNotEmpty, MinLength, MaxLength} from 'class-validator';
 import * as bcrypt from 'bcryptjs';
 
+// @TODO Determinar por qué unique username no funciona en Mongodb
 @Entity()
 @Unique(['username'])
 export class Usuario {

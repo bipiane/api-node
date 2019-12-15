@@ -97,6 +97,17 @@ export class UsuarioController extends Controller {
     user.hashPassword();
 
     const userRepository = getRepository(Usuario);
+
+    const existUser = await userRepository.findOne({
+      where: {
+        username: user.username,
+      },
+    });
+
+    if (existUser) {
+      throw new ErrorResponse('Username ya utilizado', 409, `El username '${user.username}' debe ser único.`);
+    }
+
     try {
       await userRepository.save(user);
     } catch (e) {
