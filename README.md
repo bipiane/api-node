@@ -101,6 +101,29 @@ git push origin master
 
 Luego de unos minutos la API quedará publicada en https://api-node-ipianetti.herokuapp.com/doc
 
+## Configuración MongoDB
+La aplicación usa 2 bases de datos, una de autenticación `DB_AUTH_SOURCE` y otra para la propia aplicación.
+
+Se crea el usuario en la db de autenticación: 
+```
+# Ingresar a mongodb
+mongo -u admin -p admin
+# Ingresar a la db 'admin' y crear usuario
+use admin;
+db.createUser({
+      user: "user_api",
+      pwd: "1234",
+      roles: [                
+        {role: "dbAdmin",   db: "api_node"},
+        {role: "readWrite", db: "api_node"}
+     ]
+  });
+```
+Ejecutar migraciones para crear base de datos y tablas:
+```
+npm run migration:run
+```
+
 ## Contributing
 
 Formater código con [Prettier](https://prettier.io/) según `.prettierrc` antes de hacer commit:

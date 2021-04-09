@@ -1,20 +1,16 @@
 import {MongoConnectionOptions} from 'typeorm/driver/mongodb/MongoConnectionOptions';
 
-// Cargamos tanto las variables del archivo `.envrc` para desarrollo local
+// Cargamos tanto las variables del archivo `.env` para desarrollo local
 // como las variables de `docker-compose.yml` para docker
-let {DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD} = process.env;
+let {DB_URL, DB_AUTH_SOURCE} = process.env;
 
-if (!DB_HOST || !DB_PORT || !DB_NAME || !DB_USER || !DB_PASSWORD) {
-  throw new Error("Variables de entorno no encontradas. Verifique archivo '.envrc'.");
+if (!DB_URL || !DB_AUTH_SOURCE) {
+  throw new Error("Variables de entorno no encontradas. Verifique archivo '.env'.");
 }
 
 const conn: MongoConnectionOptions = {
   type: 'mongodb',
-  host: DB_HOST,
-  port: Number(DB_PORT),
-  database: DB_NAME,
-  username: DB_USER,
-  password: DB_PASSWORD,
+  url: DB_URL,
   synchronize: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -26,6 +22,9 @@ const conn: MongoConnectionOptions = {
     entitiesDir: 'src/entity',
     migrationsDir: 'src/migration',
     subscribersDir: 'src/subscriber',
+  },
+  extra: {
+    authSource: DB_AUTH_SOURCE,
   },
 };
 
