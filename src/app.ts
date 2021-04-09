@@ -52,6 +52,11 @@ createConnection()
       console.error('Error al cargar documentación Swagger: ', error);
     }
 
+    // Redirect del home a la documentación
+    app.get('/', function(req, res) {
+      res.redirect('/doc');
+    });
+
     app.listen(Number(port), '0.0.0.0', () => {
       console.log(chalk.green(`🚀 Server started: http://localhost:${port}/doc`));
     });
