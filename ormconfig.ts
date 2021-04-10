@@ -15,7 +15,7 @@ const conn: MongoConnectionOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   logging: true,
-  entities: ['src/entity/**/*.ts'],
+  entities: ['src/entity/*.ts', './build/src/entity/*.js'],
   migrations: ['src/migration/**/*.ts'],
   subscribers: ['src/subscriber/**/*.ts'],
   cli: {

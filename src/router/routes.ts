@@ -376,7 +376,9 @@ export function RegisterRoutes(app: express.Express) {
 
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-        if (data || data === false) {
+        if (data && typeof data.pipe === 'function' && data.readable && typeof data._read === 'function') {
+          data.pipe(response);
+        } else if (data || data === false) {
           // === false allows boolean result
           response.status(statusCode || 200).json(data);
         } else {
