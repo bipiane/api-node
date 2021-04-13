@@ -15,7 +15,12 @@ const models: TsoaRoute.Models = {
   TokenAPI: {
     dataType: 'refObject',
     properties: {
-      token: {dataType: 'string', required: true},
+      userId: {dataType: 'string', required: true},
+      username: {dataType: 'string', required: true},
+      role: {dataType: 'string', required: true},
+      accessToken: {dataType: 'string', required: true},
+      refreshToken: {dataType: 'string', required: true},
+      expiresIn: {dataType: 'double', required: true},
     },
     additionalProperties: false,
   },
@@ -43,11 +48,19 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  LoginRequest: {
+  TokenRequest: {
     dataType: 'refObject',
     properties: {
       username: {dataType: 'string', required: true},
       password: {dataType: 'string', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  RefreshTokenRequest: {
+    dataType: 'refObject',
+    properties: {
+      refreshToken: {dataType: 'string', required: true},
     },
     additionalProperties: false,
   },
@@ -143,9 +156,9 @@ export function RegisterRoutes(app: express.Express) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
-  app.post('/login', function(request: any, response: any, next: any) {
+  app.post('/auth/token', function(request: any, response: any, next: any) {
     const args = {
-      data: {in: 'body', name: 'data', required: true, ref: 'LoginRequest'},
+      data: {in: 'body', name: 'data', required: true, ref: 'TokenRequest'},
     };
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -159,11 +172,31 @@ export function RegisterRoutes(app: express.Express) {
 
     const controller = new AuthController();
 
-    const promise = controller.login.apply(controller, validatedArgs as any);
+    const promise = controller.token.apply(controller, validatedArgs as any);
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.put('/changePassword', authenticateMiddleware([{access_token: []}]), function(
+  app.post('/auth/refresh', function(request: any, response: any, next: any) {
+    const args = {
+      data: {in: 'body', name: 'data', required: true, ref: 'RefreshTokenRequest'},
+    };
+
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+    let validatedArgs: any[] = [];
+    try {
+      validatedArgs = getValidatedArgs(args, request);
+    } catch (err) {
+      return next(err);
+    }
+
+    const controller = new AuthController();
+
+    const promise = controller.refresh.apply(controller, validatedArgs as any);
+    promiseHandler(controller, promise, response, next);
+  });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.put('/auth/changePassword', authenticateMiddleware([{access_token: []}]), function(
     request: any,
     response: any,
     next: any,

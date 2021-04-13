@@ -39,6 +39,9 @@ export class Usuario {
   role: string;
 
   @Column()
+  refreshToken?: string;
+
+  @Column()
   @CreateDateColumn()
   createdAt: Date;
 

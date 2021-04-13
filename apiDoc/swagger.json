@@ -4,11 +4,27 @@
   "definitions": {
     "TokenAPI": {
       "properties": {
-        "token": {
+        "userId": {
           "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        },
+        "expiresIn": {
+          "type": "number",
+          "format": "double"
         }
       },
-      "required": ["token"],
+      "required": ["userId", "username", "role", "accessToken", "refreshToken", "expiresIn"],
       "type": "object",
       "additionalProperties": false
     },
@@ -59,7 +75,7 @@
       "type": "object",
       "additionalProperties": false
     },
-    "LoginRequest": {
+    "TokenRequest": {
       "properties": {
         "username": {
           "type": "string"
@@ -74,6 +90,19 @@
       "example": {
         "username": "ipianetti",
         "password": "1234"
+      }
+    },
+    "RefreshTokenRequest": {
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      },
+      "required": ["refreshToken"],
+      "type": "object",
+      "additionalProperties": false,
+      "example": {
+        "refreshToken": "427c5188b462e6ed9ccfa89f46e91a0"
       }
     },
     "UsuarioAPI": {
@@ -235,9 +264,9 @@
     "description": "Node REST API: https://github.com/bipiane/api-node"
   },
   "paths": {
-    "/login": {
+    "/auth/token": {
       "post": {
-        "operationId": "login",
+        "operationId": "token",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -259,7 +288,7 @@
             }
           }
         },
-        "summary": "Obtención de Token JWT",
+        "summary": "Obtención de Token JWT con username y password",
         "tags": ["Auth"],
         "security": [],
         "parameters": [
@@ -268,13 +297,52 @@
             "name": "data",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/LoginRequest"
+              "$ref": "#/definitions/TokenRequest"
             }
           }
         ]
       }
     },
-    "/changePassword": {
+    "/auth/refresh": {
+      "post": {
+        "operationId": "refresh",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/TokenAPI"
+            }
+          },
+          "400": {
+            "description": "refreshToken es requerido",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "RefreshToken incorrecto o revocado",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "summary": "Obtención de Token JWT con refresh token",
+        "tags": ["Auth"],
+        "security": [],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshTokenRequest"
+            }
+          }
+        ]
+      }
+    },
+    "/auth/changePassword": {
       "put": {
         "operationId": "changePassword",
         "produces": ["application/json"],
