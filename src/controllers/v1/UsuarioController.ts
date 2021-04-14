@@ -52,6 +52,7 @@ export class UsuarioController extends Controller {
    * @param id
    */
   @Get('{id}')
+  @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('findUsuario')
   @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
   async show(id: string): Promise<UsuarioResponseData> {
@@ -70,6 +71,7 @@ export class UsuarioController extends Controller {
    * @param data
    */
   @Post()
+  @Security('access_token', ['SUPER_ADMIN'])
   @OperationId('saveUsuario')
   @SuccessResponse('201', 'Usuario creado correctamente')
   @Response<ErrorResponse>('409', 'Errores de validación')

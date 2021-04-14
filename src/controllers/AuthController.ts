@@ -4,7 +4,20 @@ import {validate} from 'class-validator';
 import * as crypto from 'crypto';
 
 import {Usuario} from '../entity/Usuario';
-import {Body, Controller, OperationId, Post, Put, Request, Response, Route, Security, Tags} from 'tsoa';
+import {
+  Body,
+  Controller,
+  Get,
+  OperationId,
+  Post,
+  Put,
+  Request,
+  Response,
+  Route,
+  Security,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import {ErrorResponse, ErrorValidacion} from './v1/utilidades/ErrorResponse';
 import {UsuarioResponseData} from './v1/utilidades/UsuarioAPI';
 
@@ -135,6 +148,33 @@ export class AuthController extends Controller {
     //Send the jwt in the response
     this.setStatus(200);
     return tokenApi;
+  }
+
+  /**
+   * @summary Revoca o vence el refresh token del usuario
+   */
+  @Get('revoke')
+  @Security('access_token')
+  @OperationId('revokeToken')
+  @SuccessResponse('200', 'Refresh Token revocado correctamente')
+  @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
+  @Response<ErrorResponse>('409', 'Errores de validación')
+  async revoke(@Request() request: any) {
+    const userJWT: TokenPayload = request.user;
+    const userRepository = getRepository(Usuario);
+    let usuario = await userRepository.findOne(userJWT.userId);
+    if (!usuario) {
+      throw new ErrorResponse(`No se encontró usuario con ID ${userJWT.userId}`, 404);
+    }
+
+    try {
+      usuario.refreshToken = null;
+      await userRepository.save(usuario);
+    } catch (e) {
+      throw new ErrorResponse('Excepción al guardar usuario.', 409, e.message);
+    }
+
+    this.setStatus(200);
   }
 
   /**

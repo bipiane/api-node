@@ -196,6 +196,30 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get('/auth/revoke', authenticateMiddleware([{access_token: []}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
+    const args = {
+      request: {in: 'request', name: 'request', required: true, dataType: 'object'},
+    };
+
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+    let validatedArgs: any[] = [];
+    try {
+      validatedArgs = getValidatedArgs(args, request);
+    } catch (err) {
+      return next(err);
+    }
+
+    const controller = new AuthController();
+
+    const promise = controller.revoke.apply(controller, validatedArgs as any);
+    promiseHandler(controller, promise, response, next);
+  });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.put('/auth/changePassword', authenticateMiddleware([{access_token: []}]), function(
     request: any,
     response: any,
@@ -246,7 +270,11 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.get('/api/v1/usuarios/:id', function(request: any, response: any, next: any) {
+  app.get('/api/v1/usuarios/:id', authenticateMiddleware([{access_token: ['SUPER_ADMIN']}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
     const args = {
       id: {in: 'path', name: 'id', required: true, dataType: 'string'},
     };
@@ -266,7 +294,11 @@ export function RegisterRoutes(app: express.Express) {
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/v1/usuarios', function(request: any, response: any, next: any) {
+  app.post('/api/v1/usuarios', authenticateMiddleware([{access_token: ['SUPER_ADMIN']}]), function(
+    request: any,
+    response: any,
+    next: any,
+  ) {
     const args = {
       data: {in: 'body', name: 'data', required: true, ref: 'UsuarioCreationRequest'},
     };

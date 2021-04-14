@@ -45,17 +45,6 @@ export class UsuarioResponseData extends DataOk {
   }
 }
 
-export class UsuarioResponseLista extends DataOk {
-  data: UsuarioAPI[];
-
-  constructor(usuarios: Usuario[], status = 200, userMessage: string = null, actions: string = null) {
-    super(status, userMessage, actions);
-    this.data = usuarios.map(u => {
-      return new UsuarioAPI(u);
-    });
-  }
-}
-
 export class UsuarioResponsePaginacion extends DataOk {
   data: UsuarioAPIPaginacion;
 

@@ -342,6 +342,37 @@
         ]
       }
     },
+    "/auth/revoke": {
+      "get": {
+        "operationId": "revokeToken",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Refresh Token revocado correctamente"
+          },
+          "404": {
+            "description": "No se encontró usuario con ID 123",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Errores de validación",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "summary": "Revoca o vence el refresh token del usuario",
+        "tags": ["Auth"],
+        "security": [
+          {
+            "access_token": []
+          }
+        ],
+        "parameters": []
+      }
+    },
     "/auth/changePassword": {
       "put": {
         "operationId": "changePassword",
@@ -446,7 +477,11 @@
         },
         "summary": "Permite crear un usuario",
         "tags": ["Usuario"],
-        "security": [],
+        "security": [
+          {
+            "access_token": ["SUPER_ADMIN"]
+          }
+        ],
         "parameters": [
           {
             "in": "body",
@@ -479,7 +514,11 @@
         },
         "summary": "Obtiene un usuario por ID",
         "tags": ["Usuario"],
-        "security": [],
+        "security": [
+          {
+            "access_token": ["SUPER_ADMIN"]
+          }
+        ],
         "parameters": [
           {
             "in": "path",
