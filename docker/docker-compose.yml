@@ -11,6 +11,6 @@ services:
       DB_AUTH_SOURCE: $DB_AUTH_SOURCE
     restart: unless-stopped
     ports:
-      - $PORT:$PORT
+      - ${PORT}:${PORT}
     volumes:
       - ../.:/usr/src/app
