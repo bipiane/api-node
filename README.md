@@ -38,6 +38,7 @@ Ejecutar aplicación y sincronizar base de datos
 
 ```
 npm run dev
+# 🚀 Server started: http://localhost:3000/doc
 ```    
 Swagger UI
 ![Example Delete](docs/swagger_ui.jpg)
@@ -85,9 +86,10 @@ npm run build
 # Migrar Base de Datos
 npm run migration:run
 # Crear y levantar contenedor
-docker-compose -f docker/docker-compose.yml up -d --build
+docker-compose --env-file .env -f docker/docker-compose.yml up -d --build
+# 🚀 Server started: http://localhost:3000/doc
 # Apagar contenedor
-docker-compose -f docker/docker-compose.yml stop
+docker-compose --env-file .env -f docker/docker-compose.yml stop
 ```
 
 ## Deploy en Heroku con BitBucket Pipeline
