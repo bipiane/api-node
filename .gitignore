@@ -8,6 +8,7 @@ temp/
 
 # Environment
 .env
+src/versions.ts
 
 # Testing
 coverage
