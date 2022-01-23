@@ -5,6 +5,8 @@ import {Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute} fr
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import {AuthController} from './../controllers/AuthController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import {HealthController} from './../controllers/HealthController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import {UsuarioController} from './../controllers/v1/UsuarioController';
 import {expressAuthentication} from './../security/authentication';
 import * as express from 'express';
@@ -92,6 +94,38 @@ const models: TsoaRoute.Models = {
     properties: {
       oldPassword: {dataType: 'string', required: true},
       newPassword: {dataType: 'string', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  StatusApp: {
+    dataType: 'refObject',
+    properties: {
+      app: {dataType: 'boolean', required: true},
+      database: {dataType: 'boolean', required: true},
+      error: {dataType: 'boolean', required: true},
+      errors: {dataType: 'array', array: {dataType: 'string'}, required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  AppInfo: {
+    dataType: 'refObject',
+    properties: {
+      version: {dataType: 'string', required: true},
+      revision: {dataType: 'string', required: true},
+      branch: {dataType: 'string', required: true},
+      buildDate: {dataType: 'string', required: true},
+      buildNumber: {dataType: 'string', required: true},
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  HealthCheck: {
+    dataType: 'refObject',
+    properties: {
+      status: {ref: 'StatusApp', required: true},
+      appInfo: {ref: 'AppInfo', required: true},
     },
     additionalProperties: false,
   },
@@ -242,6 +276,26 @@ export function RegisterRoutes(app: express.Express) {
     const controller = new AuthController();
 
     const promise = controller.changePassword.apply(controller, validatedArgs as any);
+    promiseHandler(controller, promise, response, next);
+  });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.get('/health', function(request: any, response: any, next: any) {
+    const args = {
+      request: {in: 'request', name: 'request', required: true, dataType: 'object'},
+    };
+
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+    let validatedArgs: any[] = [];
+    try {
+      validatedArgs = getValidatedArgs(args, request);
+    } catch (err) {
+      return next(err);
+    }
+
+    const controller = new HealthController();
+
+    const promise = controller.health.apply(controller, validatedArgs as any);
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

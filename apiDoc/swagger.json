@@ -165,6 +165,63 @@
         "newPassword": "1234"
       }
     },
+    "StatusApp": {
+      "properties": {
+        "app": {
+          "type": "boolean"
+        },
+        "database": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "boolean"
+        },
+        "errors": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["app", "database", "error", "errors"],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "AppInfo": {
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "buildDate": {
+          "type": "string"
+        },
+        "buildNumber": {
+          "type": "string"
+        }
+      },
+      "required": ["version", "revision", "branch", "buildDate", "buildNumber"],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "HealthCheck": {
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/StatusApp"
+        },
+        "appInfo": {
+          "$ref": "#/definitions/AppInfo"
+        }
+      },
+      "required": ["status", "appInfo"],
+      "type": "object",
+      "additionalProperties": false
+    },
     "MetadataResponse": {
       "properties": {
         "offset": {
@@ -420,6 +477,24 @@
             }
           }
         ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "getHealthCheck",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "$ref": "#/definitions/HealthCheck"
+            }
+          }
+        },
+        "summary": "Obtiene el estado de salud e información de la App",
+        "tags": ["Health"],
+        "security": [],
+        "parameters": []
       }
     },
     "/api/v1/usuarios": {
