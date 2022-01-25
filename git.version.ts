@@ -8,8 +8,12 @@ const moment = require('moment');
  * Creates App version file
  */
 async function createVersionsFile(filename: string) {
-  let revision = '-';
-  let branch = '-';
+  let revision = process.env.HEROKU_SLUG_DESCRIPTION;
+  if (revision) {
+    revision = revision.replace('Deploy ', '');
+  }
+  let branch = process.env.NODE_ENV;
+
   try {
     revision = (await exec('git rev-parse --short HEAD')).stdout.toString().trim();
     branch = (await exec('git rev-parse --abbrev-ref HEAD')).stdout.toString().trim();
