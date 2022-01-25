@@ -8,8 +8,12 @@ const moment = require('moment');
  * Creates App version file
  */
 async function createVersionsFile(filename: string) {
-  const revision = (await exec('git rev-parse --short HEAD')).stdout.toString().trim();
-  const branch = (await exec('git rev-parse --abbrev-ref HEAD')).stdout.toString().trim();
+  let revision = '-';
+  let branch = '-';
+  try {
+    revision = (await exec('git rev-parse --short HEAD')).stdout.toString().trim();
+    branch = (await exec('git rev-parse --abbrev-ref HEAD')).stdout.toString().trim();
+  } catch ($e) {}
 
   console.log(` 🚀 Version: '${process.env.npm_package_version}', revision: '${revision}', branch: '${branch}'`);
 
