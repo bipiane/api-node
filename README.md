@@ -14,6 +14,9 @@ https://api-node-ipianetti.herokuapp.com/doc
 - MongoDB with TypeORM
 - Docker
 - BitBucket Pipelines with Heroku
+- Code Style with Prettier
+- Git Hooks with Husky
+- Testing with Mocha
 
 ### Setup
 
@@ -41,7 +44,7 @@ npm run dev
 # 🚀 Server started: http://localhost:3000/doc
 ```    
 Swagger UI
-![Example Delete](docs/swagger_ui.jpg)
+![Example Delete](docs/swagger_ui.png)
 
 Ejecutar migración para crear usuarios iniciales
 
@@ -51,11 +54,11 @@ npm run migration:run
 
 ## Development
 
-Ejecutar luego de editar controladores y entidades
+Ejecutar luego de editar controladores y entidades.
 
+Creará las rutas de api y su [swagger.json](./apiDoc/swagger.json),
+según la configuración [tsoa.json](./tsoa.json)
 ```
-# Creará las rutas de api y su swagger.json,
-# según la configuración tsoa.json
 npm run tsoa:gen
 ```
 
