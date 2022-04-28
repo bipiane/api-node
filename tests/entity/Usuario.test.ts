@@ -7,6 +7,11 @@ describe('usuario/password', () => {
     sut.password = 'asdf';
     expect(sut.hashPassword()).to.be.a('string');
   });
+  it('Password correcto', () => {
+    const clave = 'asdf';
+    sut.password = '$2a$08$d728wuZ7ttMfDkl2I.kjYOetHMgXTYpbjZY6AyrUTJF5gpKdAmgHq';
+    expect(sut.checkIfUnencryptedPasswordIsValid(clave)).to.equal(true, '-');
+  });
   it('Password incorrecto', () => {
     const clave = 'asdf';
     sut.password = clave;
