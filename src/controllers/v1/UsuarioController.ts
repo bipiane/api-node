@@ -76,8 +76,8 @@ export class UsuarioController extends Controller {
   @SuccessResponse('201', 'Usuario creado correctamente')
   @Response<ErrorResponse>('409', 'Errores de validación')
   async save(@Body() data: UsuarioCreationRequest): Promise<UsuarioResponseData> {
-    let {username, password, role} = data;
-    let user = new Usuario();
+    const {username, password, role} = data;
+    const user = new Usuario();
     user.username = username;
     user.password = password;
     user.role = role;

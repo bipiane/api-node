@@ -3,6 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import {getRepository} from 'typeorm';
 import {Usuario} from '../entity/Usuario';
 
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export function expressAuthentication(request: express.Request, securityName: string, scopes?: string[]): Promise<any> {
   if (securityName === 'access_token') {
     const token = request.headers.authorization;
@@ -11,6 +12,7 @@ export function expressAuthentication(request: express.Request, securityName: st
       if (!token) {
         reject(new Error('Solicitud sin token'));
       }
+      // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       jwt.verify(token, process.env.JWT_SECRET, async function(err: any, decoded: any) {
         if (err) {
           reject(err);
@@ -24,7 +26,7 @@ export function expressAuthentication(request: express.Request, securityName: st
             reject(new Error('Error al validar roles. Usuario no encontrado.'));
           }
 
-          for (let scope of scopes) {
+          for (const scope of scopes) {
             if (user && user.role !== scope) {
               reject(new Error('El usuario no posee los roles requeridos.'));
             }

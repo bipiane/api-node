@@ -2,6 +2,7 @@ import {MigrationInterface, QueryRunner, getRepository} from 'typeorm';
 import {Usuario} from '../entity/Usuario';
 
 export class CreateAdminUser1547919837483 implements MigrationInterface {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars
   public async up(queryRunner: QueryRunner): Promise<any> {
     let user = new Usuario();
     user.username = 'admin';
@@ -26,5 +27,6 @@ export class CreateAdminUser1547919837483 implements MigrationInterface {
     }
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any,@typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
   public async down(queryRunner: QueryRunner): Promise<any> {}
 }

@@ -1,4 +1,4 @@
-import {Controller, Get, OperationId, Request, Route, Tags} from 'tsoa';
+import {Controller, Get, OperationId, Route, Tags} from 'tsoa';
 import {versions} from '../versions';
 export class HealthCheck {
   status: StatusApp;
@@ -13,12 +13,13 @@ export class StatusApp {
 }
 
 export class AppInfo {
-  version: String;
-  revision: String;
-  branch: String;
-  buildDate: String;
-  buildNumber: String;
+  version: string;
+  revision: string;
+  branch: string;
+  buildDate: string;
+  buildNumber: string;
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   constructor(info: any) {
     this.version = info.version;
     this.revision = info.revision;
@@ -36,8 +37,8 @@ export class HealthController extends Controller {
    */
   @Get('health')
   @OperationId('getHealthCheck')
-  async health(@Request() request: any): Promise<HealthCheck> {
-    let health = new HealthCheck();
+  async health(): Promise<HealthCheck> {
+    const health = new HealthCheck();
     health.status = new StatusApp();
     health.status.app = true;
     health.status.database = true;

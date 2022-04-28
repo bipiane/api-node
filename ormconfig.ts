@@ -2,7 +2,7 @@ import {MongoConnectionOptions} from 'typeorm/driver/mongodb/MongoConnectionOpti
 
 // Cargamos tanto las variables del archivo `.env` para desarrollo local
 // como las variables de `docker-compose.yml` para docker
-let {DB_URL, DB_AUTH_SOURCE} = process.env;
+const {DB_URL, DB_AUTH_SOURCE} = process.env;
 
 if (!DB_URL || !DB_AUTH_SOURCE) {
   throw new Error("Variables de entorno no encontradas. Verifique archivo '.env'.");

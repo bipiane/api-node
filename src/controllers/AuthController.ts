@@ -96,7 +96,7 @@ export class AuthController extends Controller {
   @Response<ErrorResponse>('400', 'Username y password son requeridos')
   @Response<ErrorResponse>('401', 'Username o password incorrecto')
   async token(@Body() data: TokenRequest): Promise<TokenAPI> {
-    let {username, password} = data;
+    const {username, password} = data;
     if (!(username && password)) {
       throw new ErrorResponse(`Username y password son requeridos`, 400);
     }
@@ -159,10 +159,11 @@ export class AuthController extends Controller {
   @SuccessResponse('200', 'Refresh Token revocado correctamente')
   @Response<ErrorResponse>('404', 'No se encontró usuario con ID 123')
   @Response<ErrorResponse>('409', 'Errores de validación')
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   async revoke(@Request() request: any) {
     const userJWT: TokenPayload = request.user;
     const userRepository = getRepository(Usuario);
-    let usuario = await userRepository.findOne(userJWT.userId);
+    const usuario = await userRepository.findOne(userJWT.userId);
     if (!usuario) {
       throw new ErrorResponse(`No se encontró usuario con ID ${userJWT.userId}`, 404);
     }
@@ -186,6 +187,7 @@ export class AuthController extends Controller {
   @Response<ErrorResponse>('400', 'La clave nueva y actual clave son requeridas')
   @Response<ErrorResponse>('401', 'La clave actual es incorrecta')
   @Response<ErrorResponse>('409', 'Errores de validación')
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   async changePassword(@Request() request: any, @Body() data: ChangePasswordRequest): Promise<UsuarioResponseData> {
     //Get ID from JWT
     const userJWT: TokenPayload = request.user;
@@ -265,11 +267,11 @@ export class AuthController extends Controller {
    * @param retries
    * @private
    */
-  private static async getUniqueToken(user: Usuario, retries: number = 5) {
+  private static async getUniqueToken(user: Usuario, retries = 5) {
     if (retries <= 0) {
       return null;
     }
-    let refreshToken = AuthController.getRandomToken();
+    const refreshToken = AuthController.getRandomToken();
     const userRepository = getRepository(Usuario);
 
     // Buscamos otros usuarios con el mismo token
@@ -297,7 +299,7 @@ export class AuthController extends Controller {
    * @param size
    * @private
    */
-  private static getRandomToken(size: number = 40) {
+  private static getRandomToken(size = 40) {
     return crypto.randomBytes(size).toString('hex');
   }
 }

@@ -7,6 +7,7 @@ import * as helmet from 'helmet';
 import * as cors from 'cors';
 import {RegisterRoutes} from './router/routes';
 import {ErrorResponse} from './controllers/v1/utilidades/ErrorResponse';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const swaggerUi = require('swagger-ui-express');
 
 // Obtenemos variables de .env
@@ -45,6 +46,7 @@ createConnection()
 
     // Cargamos la documentación Swagger generada
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const swaggerDoc = require('../apiDoc/swagger.json');
       // Exponemos documentación SwaggerUI en la siguiente URL
       app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDoc));

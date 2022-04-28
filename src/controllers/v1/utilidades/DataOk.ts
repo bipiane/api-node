@@ -1,7 +1,7 @@
 export class DataOk {
-  result: string = 'ok';
-  status: number = 200;
-  data: any;
+  result = 'ok';
+  status = 200;
+  data: any; // eslint-disable-line
   userMessage: string;
   actions: string;
 

@@ -2,6 +2,7 @@ import {writeFileSync} from 'fs';
 import {promisify} from 'util';
 import * as child from 'child_process';
 const exec = promisify(child.exec);
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const moment = require('moment');
 
 /**
@@ -17,7 +18,9 @@ async function createVersionsFile(filename: string) {
   try {
     revision = (await exec('git rev-parse --short HEAD')).stdout.toString().trim();
     branch = (await exec('git rev-parse --abbrev-ref HEAD')).stdout.toString().trim();
-  } catch ($e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   console.log(` 🚀 Version: '${process.env.npm_package_version}', revision: '${revision}', branch: '${branch}'`);
 
