@@ -1,5 +1,6 @@
 # Node REST API
 
+[![Deployment Pipeline](https://github.com/bipiane/api-node/actions/workflows/pipeline.yml/badge.svg)](https://github.com/bipiane/api-node/actions/workflows/pipeline.yml)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 https://api-node-ipianetti.herokuapp.com/doc
