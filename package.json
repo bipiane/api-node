@@ -61,7 +61,7 @@
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "husky": "^7.0.4",
-    "jsdom": "^15.2.1",
+    "jsdom": "^16.5.0",
     "nyc": "^14.1.1",
     "source-map-support": "^0.5.19",
     "typescript": "^3.9.10"
