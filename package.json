@@ -41,7 +41,7 @@
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.3",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "mongodb": "^3.6.6",
     "mysql": "^2.18.1",
     "prettier": "^1.19.1",
