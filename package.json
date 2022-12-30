@@ -40,7 +40,7 @@
     "express": "^4.17.1",
     "helmet": "^3.23.3",
     "jsonwebtoken": "^8.5.1",
-    "mocha": "^6.2.3",
+    "mocha": "^10.2.0",
     "moment": "^2.29.1",
     "mongodb": "^3.6.6",
     "mysql": "^2.18.1",
